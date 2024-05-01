@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using XLerator.ExcelMappings;
 
-namespace XLerator;
+namespace XLerator.ExcelUtility.Reader;
 
 public class ExcelReader : IDisposable
 {

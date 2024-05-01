@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using XLerator.Tags;
+using XLerator.Attributes;
 
 namespace XLerator.ExcelMappings;
 

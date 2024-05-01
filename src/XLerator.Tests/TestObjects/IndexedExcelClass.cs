@@ -1,4 +1,4 @@
-﻿using XLerator.Tags;
+﻿using XLerator.Attributes;
 
 namespace XLerator.Tests.TestObjects;
 

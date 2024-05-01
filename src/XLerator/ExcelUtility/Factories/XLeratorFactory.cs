@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
+using XLerator.Attributes;
 using XLerator.ExcelMappings;
-using XLerator.Tags;
+using XLerator.ExcelUtility.Creator;
+using XLerator.ExcelUtility.Reader;
 
-namespace XLerator;
+namespace XLerator.ExcelUtility.Factories;
 
 public class XLeratorFactory(string filePath)
 {
@@ -12,10 +14,10 @@ public class XLeratorFactory(string filePath)
         return ExcelReader.Create(filePath, mapper);
     }
 
-    public ExcelWriter CreateWriter<T>() where T : class
+    public ExcelCreator CreateWriter<T>() where T : class
     {
         var mapper = CreateMapper(typeof(T));
-        return ExcelWriter.Create(filePath, mapper);
+        return ExcelCreator.Create(filePath, mapper);
     }
 
     internal static ExcelMapperBase CreateMapper(Type type)

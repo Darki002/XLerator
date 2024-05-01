@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using XLerator.Attributes;
 
-namespace XLerator.ExcelMappings;
+namespace XLerator.Mappings;
 
 internal class IndexedExcelMapper : ExcelMapperBase
 {

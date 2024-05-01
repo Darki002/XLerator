@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using XLerator.Attributes;
-using XLerator.ExcelMappings;
 using XLerator.ExcelUtility.Creator;
 using XLerator.ExcelUtility.Reader;
+using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Factories;
 

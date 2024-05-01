@@ -1,6 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
-using XLerator.ExcelMappings;
+using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Creator;
 

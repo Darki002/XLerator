@@ -1,4 +1,4 @@
-﻿namespace XLerator.ExcelMappings;
+﻿namespace XLerator.Mappings;
 
 internal abstract class ExcelMapperBase
 { 

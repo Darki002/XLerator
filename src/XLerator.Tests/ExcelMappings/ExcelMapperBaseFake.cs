@@ -1,4 +1,4 @@
-﻿using XLerator.ExcelMappings;
+﻿using XLerator.Mappings;
 
 namespace XLerator.Tests.ExcelMappings;
 

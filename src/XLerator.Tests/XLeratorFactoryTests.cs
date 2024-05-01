@@ -1,5 +1,5 @@
-﻿using XLerator.ExcelMappings;
-using XLerator.ExcelUtility.Factories;
+﻿using XLerator.ExcelUtility.Factories;
+using XLerator.Mappings;
 using XLerator.Tests.TestObjects;
 
 namespace XLerator.Tests;

@@ -2,7 +2,7 @@
 
 namespace XLerator.Tests.ExcelMappings;
 
-public class ExcelMapperBaseFake : ExcelMapperBase
+internal class ExcelMapperBaseFake : ExcelMapperBase
 {
     public Dictionary<string, int> PropertyIndexMapSpy => PropertyIndexMap;
 

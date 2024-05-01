@@ -1,10 +1,10 @@
 ﻿namespace XLerator.ExcelMappings;
 
-public abstract class ExcelMapperBase
+internal abstract class ExcelMapperBase
 { 
-     protected readonly Dictionary<string, int> PropertyIndexMap = new Dictionary<string, int>();
+     internal readonly Dictionary<string, int> PropertyIndexMap = new Dictionary<string, int>();
 
-     protected readonly Dictionary<string, string> HeaderMap = new Dictionary<string, string>();
+     internal readonly Dictionary<string, string> HeaderMap = new Dictionary<string, string>();
      
      public string GetColumnFor(string propertyName)
      {

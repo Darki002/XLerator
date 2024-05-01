@@ -3,11 +3,11 @@ using XLerator.Tags;
 
 namespace XLerator.ExcelMappings;
 
-public class IndexedExcelMapper : ExcelMapperBase
+internal class IndexedExcelMapper : ExcelMapperBase
 {
     private IndexedExcelMapper() {}
     
-    public static IndexedExcelMapper CreateFrom(Type type)
+    internal static IndexedExcelMapper CreateFrom(Type type)
     {
         var mapper = new IndexedExcelMapper();
 

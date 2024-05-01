@@ -3,11 +3,11 @@ using XLerator.Tags;
 
 namespace XLerator.ExcelMappings;
 
-internal class HeaderExcelMapper : ExcelMapperBase
+public class HeaderExcelMapper : ExcelMapperBase
 {
     private HeaderExcelMapper() {}
     
-    internal static HeaderExcelMapper CreateFrom(Type type)
+    public static HeaderExcelMapper CreateFrom(Type type)
     {
         var mapper = new HeaderExcelMapper();
         
@@ -28,7 +28,7 @@ internal class HeaderExcelMapper : ExcelMapperBase
         return mapper;
     }
 
-    internal static HeaderExcelMapper CreateFrom(Type type, string filePath)
+    public static HeaderExcelMapper CreateFrom(Type type, string filePath)
     {
         throw new NotImplementedException();
     }

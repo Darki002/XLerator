@@ -1,6 +1,6 @@
 ﻿namespace XLerator.ExcelMappings;
 
-internal abstract class ExcelMapperBase
+public abstract class ExcelMapperBase
 { 
      protected readonly Dictionary<string, int> PropertyIndexMap = new Dictionary<string, int>();
 
@@ -9,7 +9,7 @@ internal abstract class ExcelMapperBase
      public string GetColumnFor(string propertyName)
      {
           var columnNumber = PropertyIndexMap[propertyName];
-          return IntoToColumnString(columnNumber);
+          return IntToColumnString(columnNumber);
      }
 
      public string GetHeaderNameFor(string propertyName)
@@ -17,7 +17,7 @@ internal abstract class ExcelMapperBase
           return HeaderMap.GetValueOrDefault(propertyName, propertyName);
      }
 
-     private static string IntoToColumnString(int columnNumber)
+     private static string IntToColumnString(int columnNumber)
      {
           var columnName = string.Empty;
           while (columnNumber > 0)

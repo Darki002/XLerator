@@ -2,7 +2,7 @@
 using XLerator.Mappings;
 using XLerator.Tests.TestObjects;
 
-namespace XLerator.Tests;
+namespace XLerator.Tests.ExcelUtility.Factories;
 
 [TestFixture]
 public class XLeratorFactoryTests

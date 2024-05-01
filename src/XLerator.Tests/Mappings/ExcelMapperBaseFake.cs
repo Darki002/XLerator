@@ -1,6 +1,6 @@
 ﻿using XLerator.Mappings;
 
-namespace XLerator.Tests.ExcelMappings;
+namespace XLerator.Tests.Mappings;
 
 internal class ExcelMapperBaseFake : ExcelMapperBase
 {
@@ -16,5 +16,10 @@ internal class ExcelMapperBaseFake : ExcelMapperBase
     public void AddHeaderMap(string key, string value)
     {
         HeaderMap.Add(key, value);
+    }
+
+    public override (string, int)? GetHeaderFor(string propertyName)
+    {
+        return (HeaderMap[propertyName], PropertyIndexMap[propertyName]);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace XLerator.Tests.ExcelMappings;
+﻿using XLerator.Tests.Mappings;
+
+namespace XLerator.Tests.ExcelMappings;
 
 [TestFixture]
 public class ExcelMapperBaseTest
@@ -29,7 +31,7 @@ public class ExcelMapperBaseTest
         testee.AddHeaderMap("Test", "Test Header");
         
         // Act
-        var excelCol = testee.GetHeaderNameFor("Test");
+        var excelCol = testee.GetHeaderFor("Test");
         
         // Assert
         excelCol.Should().Be("Test Header");
@@ -42,7 +44,7 @@ public class ExcelMapperBaseTest
         var testee = new ExcelMapperBaseFake();
         
         // Act
-        var excelCol = testee.GetHeaderNameFor("Test");
+        var excelCol = testee.GetHeaderFor("Test");
         
         // Assert
         excelCol.Should().Be("Test");

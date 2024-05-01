@@ -5,16 +5,17 @@ internal abstract class ExcelMapperBase
      internal readonly Dictionary<string, int> PropertyIndexMap = new Dictionary<string, int>();
 
      internal readonly Dictionary<string, string> HeaderMap = new Dictionary<string, string>();
-     
-     public string GetColumnFor(string propertyName)
-     {
-          var columnNumber = PropertyIndexMap[propertyName];
-          return IntToColumnString(columnNumber);
-     }
 
-     public string GetHeaderNameFor(string propertyName)
+     public abstract (string Name, int Index)? GetHeaderFor(string propertyName);
+     
+     public string? GetColumnFor(string propertyName)
      {
-          return HeaderMap.GetValueOrDefault(propertyName, propertyName);
+          if (PropertyIndexMap.TryGetValue(propertyName, out var columnNumber))
+          {
+               return IntToColumnString(columnNumber);
+          }
+
+          return null;
      }
 
      private static string IntToColumnString(int columnNumber)

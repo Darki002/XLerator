@@ -6,7 +6,17 @@ namespace XLerator.Mappings;
 internal class IndexedExcelMapper : ExcelMapperBase
 {
     private IndexedExcelMapper() {}
-    
+
+    public override (string, int)? GetHeaderFor(string propertyName)
+    {
+        if (PropertyIndexMap.TryGetValue(propertyName, out var headerIndex))
+        {
+            var headerName = HeaderMap.GetValueOrDefault(propertyName, propertyName);
+            return (headerName, headerIndex);
+        }
+        return null;
+    }
+
     internal static IndexedExcelMapper CreateFrom(Type type)
     {
         var mapper = new IndexedExcelMapper();

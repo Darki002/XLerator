@@ -14,10 +14,10 @@ public class XLeratorFactory(string filePath)
         return ExcelReader.Create(filePath, mapper);
     }
 
-    public ExcelCreator CreateWriter<T>() where T : class
+    public IExcelCreator<T> CreateExcelCreator<T>() where T : class
     {
         var mapper = CreateMapper(typeof(T));
-        return ExcelCreator.Create(filePath, mapper);
+        return ExcelCreator<T>.Create(filePath, mapper);
     }
 
     internal static ExcelMapperBase CreateMapper(Type type)

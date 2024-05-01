@@ -18,7 +18,7 @@ public class XLeratorFactory(string filePath)
         return ExcelWriter.Create<T>(filePath, mapper);
     }
 
-    private static ExcelMapperBase CreateMapper(Type type)
+    internal static ExcelMapperBase CreateMapper(Type type)
     {
         if (type.IsDefined(typeof(IndexedExcel)))
         {

@@ -9,10 +9,10 @@ public class ExcelWriter : IDisposable
     
     private ExcelWriter() { }
 
-    internal static ExcelWriter Create<T>(ExcelConductor<T> excelConductor) where T : class
+    internal static ExcelWriter Create<T>(string filePath) where T : class
     {
         var reader = new ExcelWriter();
-        reader.spreadsheet = SpreadsheetDocument.Create(excelConductor.FilePath, SpreadsheetDocumentType.Workbook);
+        reader.spreadsheet = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook);
         return reader;
     }
     

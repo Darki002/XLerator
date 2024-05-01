@@ -8,10 +8,10 @@ public class ExcelReader : IDisposable
     
     private ExcelReader() { }
 
-    internal static ExcelReader Create<T>(ExcelConductor<T> excelConductor) where T : class
+    internal static ExcelReader Create<T>(string filePath) where T : class
     {
         var reader = new ExcelReader();
-        reader.spreadsheet = SpreadsheetDocument.Open(excelConductor.FilePath, false);
+        reader.spreadsheet = SpreadsheetDocument.Open(filePath, false);
         return reader;
     }
     

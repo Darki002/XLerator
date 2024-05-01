@@ -2,11 +2,22 @@
 
 internal abstract class ExcelMapperBase
 { 
-     public abstract string GetColumnFor(string propertyName);
+     protected readonly Dictionary<string, int> PropertyIndexMap = new Dictionary<string, int>();
 
-     public abstract string GetHeaderNameFor(string propertyName);
+     protected readonly Dictionary<string, string> HeaderMap = new Dictionary<string, string>();
+     
+     public string GetColumnFor(string propertyName)
+     {
+          var columnNumber = PropertyIndexMap[propertyName];
+          return IntoToColumnString(columnNumber);
+     }
 
-     protected static string IntoToColumnString(int columnNumber)
+     public string GetHeaderNameFor(string propertyName)
+     {
+          return HeaderMap.GetValueOrDefault(propertyName, propertyName);
+     }
+
+     private static string IntoToColumnString(int columnNumber)
      {
           var columnName = string.Empty;
           while (columnNumber > 0)

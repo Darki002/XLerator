@@ -15,7 +15,7 @@ public class ExcelWriter : IDisposable
         this.excelMapper = excelMapper;
     }
 
-    internal static ExcelWriter Create<T>(string filePath, ExcelMapperBase excelMapper) where T : class
+    internal static ExcelWriter Create(string filePath, ExcelMapperBase excelMapper)
     {
         var reader = new ExcelWriter(excelMapper);
         reader.spreadsheet = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook);

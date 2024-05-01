@@ -9,13 +9,13 @@ public class XLeratorFactory(string filePath)
     public ExcelReader CreateReader<T>() where T : class
     {
         var mapper = CreateMapper(typeof(T));
-        return ExcelReader.Create<T>(filePath, mapper);
+        return ExcelReader.Create(filePath, mapper);
     }
 
     public ExcelWriter CreateWriter<T>() where T : class
     {
         var mapper = CreateMapper(typeof(T));
-        return ExcelWriter.Create<T>(filePath, mapper);
+        return ExcelWriter.Create(filePath, mapper);
     }
 
     internal static ExcelMapperBase CreateMapper(Type type)

@@ -14,7 +14,7 @@ public class ExcelReader : IDisposable
         this.excelMapper = excelMapper;
     }
 
-    internal static ExcelReader Create<T>(string filePath, ExcelMapperBase excelMapper) where T : class
+    internal static ExcelReader Create(string filePath, ExcelMapperBase excelMapper)
     {
         var reader = new ExcelReader(excelMapper);
         reader.spreadsheet = SpreadsheetDocument.Open(filePath, false);

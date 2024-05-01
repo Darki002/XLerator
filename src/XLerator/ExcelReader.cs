@@ -1,16 +1,22 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
+using XLerator.ExcelMappings;
 
 namespace XLerator;
 
 public class ExcelReader : IDisposable
 {
-    private SpreadsheetDocument spreadsheet = null!;
+    private readonly ExcelMapperBase excelMapper;
     
-    private ExcelReader() { }
+    private SpreadsheetDocument spreadsheet = null!;
 
-    internal static ExcelReader Create<T>(string filePath) where T : class
+    private ExcelReader(ExcelMapperBase excelMapper)
     {
-        var reader = new ExcelReader();
+        this.excelMapper = excelMapper;
+    }
+
+    internal static ExcelReader Create<T>(string filePath, ExcelMapperBase excelMapper) where T : class
+    {
+        var reader = new ExcelReader(excelMapper);
         reader.spreadsheet = SpreadsheetDocument.Open(filePath, false);
         return reader;
     }

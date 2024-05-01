@@ -5,6 +5,8 @@ namespace XLerator.ExcelMappings;
 
 internal class IndexedExcelMapper : ExcelMapperBase
 {
+    private IndexedExcelMapper() {}
+    
     internal static IndexedExcelMapper CreateFrom(Type type)
     {
         var mapper = new IndexedExcelMapper();

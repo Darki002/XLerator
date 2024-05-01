@@ -5,6 +5,8 @@ namespace XLerator.ExcelMappings;
 
 internal class HeaderExcelMapper : ExcelMapperBase
 {
+    private HeaderExcelMapper() {}
+    
     internal static HeaderExcelMapper CreateFrom(Type type)
     {
         var mapper = new HeaderExcelMapper();

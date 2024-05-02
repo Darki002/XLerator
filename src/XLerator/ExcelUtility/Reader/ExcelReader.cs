@@ -14,10 +14,10 @@ public class ExcelReader : IDisposable
         this.excelMapper = excelMapper;
     }
 
-    internal static ExcelReader Create(string filePath, ExcelMapperBase excelMapper)
+    internal static ExcelReader Create(XLeratorOptions options, ExcelMapperBase excelMapper)
     {
         var reader = new ExcelReader(excelMapper);
-        reader.spreadsheet = SpreadsheetDocument.Open(filePath, false);
+        reader.spreadsheet = SpreadsheetDocument.Open(options.FilePath, false);
         return reader;
     }
     

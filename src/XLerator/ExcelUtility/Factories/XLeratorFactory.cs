@@ -6,18 +6,23 @@ using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Factories;
 
-public class XLeratorFactory(string filePath)
+public class XLeratorFactory(XLeratorOptions options)
 {
     public ExcelReader CreateReader<T>() where T : class
     {
         var mapper = CreateMapper(typeof(T));
-        return ExcelReader.Create(filePath, mapper);
+        return ExcelReader.Create(options, mapper);
     }
 
+    /// <summary>
+    /// Creates new Instance of an <see cref="IExcelCreator{T}"/>
+    /// </summary>
+    /// <typeparam name="T">The type of data and structure of the spreadsheet</typeparam>
+    /// <returns>The new Instance</returns>
     public IExcelCreator<T> CreateExcelCreator<T>() where T : class
     {
         var mapper = CreateMapper(typeof(T));
-        return ExcelCreator<T>.Create(filePath, mapper);
+        return ExcelCreator<T>.Create(options, mapper);
     }
 
     internal static ExcelMapperBase CreateMapper(Type type)

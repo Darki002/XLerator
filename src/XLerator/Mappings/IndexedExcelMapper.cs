@@ -7,14 +7,12 @@ internal class IndexedExcelMapper : ExcelMapperBase
 {
     private IndexedExcelMapper() {}
 
-    public override (string, int)? GetHeaderFor(string propertyName)
+    public override string? GetHeaderFor(string propertyName)
     {
-        if (PropertyIndexMap.TryGetValue(propertyName, out var headerIndex))
-        {
-            var headerName = HeaderMap.GetValueOrDefault(propertyName, propertyName);
-            return (headerName, headerIndex);
-        }
-        return null;
+        if (!PropertyIndexMap.ContainsKey(propertyName)) return null;
+        
+        var headerName = HeaderMap.GetValueOrDefault(propertyName, propertyName);
+        return headerName;
     }
 
     internal static IndexedExcelMapper CreateFrom(Type type)

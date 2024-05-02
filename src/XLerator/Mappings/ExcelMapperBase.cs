@@ -6,7 +6,7 @@ internal abstract class ExcelMapperBase
 
      internal readonly Dictionary<string, string> HeaderMap = new Dictionary<string, string>();
 
-     public abstract (string Name, int Index)? GetHeaderFor(string propertyName);
+     public abstract string? GetHeaderFor(string propertyName);
      
      public string? GetColumnFor(string propertyName)
      {

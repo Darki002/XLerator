@@ -18,8 +18,8 @@ internal class ExcelMapperBaseFake : ExcelMapperBase
         HeaderMap.Add(key, value);
     }
 
-    public override (string, int)? GetHeaderFor(string propertyName)
+    public override string? GetHeaderFor(string propertyName)
     {
-        return (HeaderMap[propertyName], PropertyIndexMap[propertyName]);
+        return HeaderMap[propertyName];
     }
 }

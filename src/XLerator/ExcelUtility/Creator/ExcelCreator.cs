@@ -12,11 +12,12 @@ public class ExcelCreator<T> : IExcelCreator<T> where T : class
     private SpreadsheetDocument spreadsheet = null!;
     private StringValue sheetId = null!;
 
-    private uint currentRow = 0;
+    private uint currentRow;
     
     private ExcelCreator(ExcelMapperBase excelMapper)
     {
         this.excelMapper = excelMapper;
+        currentRow = 0;
     }
 
     internal static ExcelCreator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)

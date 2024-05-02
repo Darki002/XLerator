@@ -1,5 +1,9 @@
 ﻿namespace XLerator.ExcelUtility.Creator;
 
+/// <summary>
+/// Creates a new spreadsheet. It will be structure based on <typeparamref name="T"/>.
+/// </summary>
+/// <typeparam name="T">The type of data and structure of the spreadsheet</typeparam>
 public interface IExcelCreator<in T> : IDisposable where T : class
 {
     /// <summary>

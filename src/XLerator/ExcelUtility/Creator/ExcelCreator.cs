@@ -77,6 +77,4 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
         }
         spreadsheetDocument.SaveRowToSpreadsheet(sheetId, 0, row);
     }
-
-    
 }

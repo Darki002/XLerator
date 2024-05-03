@@ -3,7 +3,7 @@ using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Reader;
 
-public class ExcelReader : IDisposable
+internal class ExcelReader : IDisposable, IExcelReader
 {
     private readonly ExcelMapperBase excelMapper;
     

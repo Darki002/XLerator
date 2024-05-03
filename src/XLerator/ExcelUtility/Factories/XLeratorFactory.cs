@@ -8,7 +8,7 @@ namespace XLerator.ExcelUtility.Factories;
 
 public class XLeratorFactory(XLeratorOptions options)
 {
-    public ExcelReader CreateReader<T>() where T : class
+    public IExcelReader CreateReader<T>() where T : class
     {
         var mapper = CreateMapper(typeof(T));
         return ExcelReader.Create(options, mapper);

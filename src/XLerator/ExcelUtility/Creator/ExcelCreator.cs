@@ -5,7 +5,7 @@ using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Creator;
 
-public class ExcelCreator<T> : IExcelCreator<T> where T : class
+internal class ExcelCreator<T> : IExcelCreator<T> where T : class
 {
     private readonly ExcelMapperBase excelMapper;
     

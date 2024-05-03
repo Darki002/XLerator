@@ -35,5 +35,5 @@ public class XLeratorOptions
         return FilePath;
     }
 
-    internal string SheetNameOrDefault() => SheetName ?? "Sheet1";
+    internal string GetSheetNameOrDefault() => SheetName ?? "Sheet1";
 }

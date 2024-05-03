@@ -54,7 +54,7 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
         var sheet = new Sheet
         {
             Id = sheetId,
-            Name = xLeratorOptions.SheetNameOrDefault()
+            Name = xLeratorOptions.GetSheetNameOrDefault()
         };
         
         sheets?.Append(sheet);

@@ -1,5 +1,9 @@
-﻿using XLerator.ExcelUtility;
+﻿using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using XLerator.ExcelUtility;
 using XLerator.ExcelUtility.Creator;
+using XLerator.Tests.Mappings;
+using XLerator.Tests.TestObjects;
 
 namespace XLerator.Tests.ExcelUtility.Creator;
 
@@ -59,5 +63,62 @@ public class ExcelCreatorTest
         }
         fileExist = File.Exists(filePath);
         fileExist.Should().BeFalse();
+    }
+
+    [Test]
+    public void CreateExcel_CreatesHeader_WhenSetTrue()
+    {
+        // Arrange
+        const string filePath = "./CreateExcel_CreatesHeader_WhenSetTrue.xlsx";
+        const string sheetName = "Sheet";
+        var options = new XLeratorOptions
+        {
+            FilePath = filePath,
+            SheetName = sheetName
+        };
+
+        var excelMapper = new ExcelMapperBaseFake();
+        excelMapper.AddHeaderMap("Id", "Index");
+        excelMapper.AddPropertyIndexMap("Id", 0);
+        excelMapper.AddHeaderMap("Name", "Name");
+        excelMapper.AddPropertyIndexMap("Name", 0);
+
+        var testee = ExcelCreator<HeaderedExcelClass>.Create(options, excelMapper);
+        
+        // Act
+        var excelEditor = testee.CreateExcel(true);
+        excelEditor.Dispose();
+        
+        // Assert
+        using (var spreadsheetDocument = SpreadsheetDocument.Open(filePath, false))
+        {
+            var workbookPart = spreadsheetDocument.WorkbookPart;
+            var worksheetPart = workbookPart?.WorksheetParts.First();
+            var sheetData = worksheetPart?.Worksheet.Elements<SheetData>().First();
+            var rows = sheetData?.Elements<Row>().ToList();
+
+            // Assert
+            rows.Should().NotBeNull();
+            rows!.Count.Should().BeGreaterThan(0);
+
+            var headerRow = rows.First();
+            var cells = headerRow.Elements<Cell>().ToList();
+            
+            // Assert
+            cells.Count.Should().BeGreaterThan(0);
+
+            var firstHeaderValue = cells[0].InnerText;
+            var secondHeaderValue = cells[1].InnerText;
+
+            // Assert
+            firstHeaderValue.Should().Be("Index");
+            secondHeaderValue.Should().Be("Name");
+        }
+        
+        // Clean Up
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
     }
 }

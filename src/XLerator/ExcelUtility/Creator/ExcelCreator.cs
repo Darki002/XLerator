@@ -64,17 +64,7 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
     
     private void AddHeader(SpreadsheetDocument spreadsheetDocument)
     {
-       var propertyInfos = typeof(T).GetProperties();
-
-        var row = new List<ExcelCell<string>>();
-        foreach (var propertyInfo in propertyInfos)
-        {
-            var header = excelMapper.GetHeaderFor(propertyInfo.Name);
-            var col = excelMapper.GetColumnFor(propertyInfo.Name);
-            if(header is null || col is null) continue;
-            
-            row.Add(new ExcelCell<string>(col, RowIndex, header));
-        }
-        spreadsheetDocument.SaveRowToSpreadsheet(sheetId, 0, row);
+       var row = ExcelRow<T>.CreateHeader(RowIndex, excelMapper);
+       spreadsheetDocument.SaveRowToSpreadsheet(sheetId, 0, row);
     }
 }

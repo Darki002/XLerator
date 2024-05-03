@@ -79,9 +79,9 @@ public class ExcelCreatorTest
 
         var excelMapper = new ExcelMapperBaseFake();
         excelMapper.AddHeaderMap("Id", "Index");
-        excelMapper.AddPropertyIndexMap("Id", 0);
+        excelMapper.AddPropertyIndexMap("Id", 1);
         excelMapper.AddHeaderMap("Name", "Name");
-        excelMapper.AddPropertyIndexMap("Name", 0);
+        excelMapper.AddPropertyIndexMap("Name", 2);
 
         var testee = ExcelCreator<HeaderedExcelClass>.Create(options, excelMapper);
         

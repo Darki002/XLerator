@@ -10,7 +10,7 @@ public class ExcelCellTest
     public void ToCell_WithNonNullData_ShouldSetCellValueCorrectly()
     {
         // Arrange
-        var excelCell = new ExcelCell<string>("A", 1, "Hello");
+        var excelCell = new ExcelCell("A", 1, "Hello");
 
         // Act
         var cell = excelCell.ToCell();
@@ -25,7 +25,7 @@ public class ExcelCellTest
     public void ToCell_WithNumericData_ShouldSetDataTypeToNumber()
     {
         // Arrange
-        var excelCell = new ExcelCell<int>("B", 2, 123);
+        var excelCell = new ExcelCell("B", 2, 123);
 
         // Act
         var cell = excelCell.ToCell();
@@ -38,7 +38,7 @@ public class ExcelCellTest
     public void ToCell_WithBooleanData_ShouldSetDataTypeToBoolean()
     {
         // Arrange
-        var excelCell = new ExcelCell<bool>("C", 3, true);
+        var excelCell = new ExcelCell("C", 3, true);
 
         // Act
         var cell = excelCell.ToCell();
@@ -52,7 +52,7 @@ public class ExcelCellTest
     {
         // Arrange
         var dateTime = new DateTime(2020, 1, 1);
-        var excelCell = new ExcelCell<DateTime>("D", 4, dateTime);
+        var excelCell = new ExcelCell("D", 4, dateTime);
 
         // Act
         var cell = excelCell.ToCell();
@@ -65,7 +65,7 @@ public class ExcelCellTest
     public void ToCell_WithDataNull_ShouldThrowInvalidOperationException()
     {
         // Arrange
-        var excelCell = new ExcelCell<string>("E", 5);
+        var excelCell = new ExcelCell("E", 5);
 
         // Act
         Action act = () => excelCell.ToCell();

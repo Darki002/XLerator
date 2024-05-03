@@ -4,9 +4,9 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace XLerator.ExcelUtility;
 
-internal static class SpreadsheetExtensions
+internal static class HelperExtensions
 {
-    internal static void SaveRowToSpreadsheet<TRow>(this SpreadsheetDocument spreadsheetDocument, StringValue sheetId, uint rowIndex, List<ExcelCell<TRow>> row)
+    internal static void SaveRowToSpreadsheet<T>(this SpreadsheetDocument spreadsheetDocument, StringValue sheetId, uint rowIndex, ExcelRow<T> row) where T : class
     {
         var worksheetPart = (WorksheetPart?)spreadsheetDocument.WorkbookPart?.GetPartById(sheetId!);
         if (worksheetPart is null)

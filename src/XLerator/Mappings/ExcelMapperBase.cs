@@ -20,6 +20,11 @@ public abstract class ExcelMapperBase
 
      private static string IntToColumnString(int columnNumber)
      {
+          if (columnNumber <= 0)
+          {
+               throw new ArgumentException("Column Index must be greater then Zero.");
+          }
+          
           var columnName = string.Empty;
           while (columnNumber > 0)
           {

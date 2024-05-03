@@ -2,9 +2,9 @@
 
 namespace XLerator.ExcelUtility;
 
-internal struct ExcelCell<TData>(string column, uint row, TData? data = default)
+internal struct ExcelCell(string column, uint row, object? data = null)
 {
-    public TData? Data { get; set; } = data;
+    public object? Data { get; set; } = data;
 
     private string CellReference => column + row;
     
@@ -24,7 +24,8 @@ internal struct ExcelCell<TData>(string column, uint row, TData? data = default)
 
     private CellValues GetValueType()
     {
-        var type = typeof(TData);
+        var type = Data!.GetType();
+        if (type == typeof(string)) return CellValues.String;
         if (type == typeof(DateTime)) return CellValues.Date;
         if (type == typeof(bool)) return CellValues.Boolean;
         return IsNumericType(type) ? CellValues.Number : CellValues.String;

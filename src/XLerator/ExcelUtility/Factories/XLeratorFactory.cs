@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using XLerator.Attributes;
 using XLerator.ExcelUtility.Creator;
+using XLerator.ExcelUtility.Editor;
 using XLerator.ExcelUtility.Reader;
 using XLerator.Mappings;
 
@@ -29,18 +30,24 @@ public class XLeratorFactory<T> : IXLeratorFactory<T> where T : class
         return new XLeratorFactory<T>(options);
     }
 
-    public IExcelReader CreateReader() 
-    {
-        var mapper = CreateMapper(typeof(T));
-        return ExcelReader.Create(options, mapper);
-    }
-    
     public IExcelCreator<T> CreateExcelCreator()
     {
         var mapper = CreateMapper(typeof(T));
         return ExcelCreator<T>.Create(options, mapper);
     }
-
+    
+    public IExcelReader<T> CreateReader() 
+    {
+        var mapper = CreateMapper(typeof(T));
+        return ExcelReader<T>.Create(options, mapper);
+    }
+    
+    public IExcelEditor<T> CreateExcelEditor()
+    {
+        var mapper = CreateMapper(typeof(T));
+        return ExcelEditor<T>.Create(options, mapper);
+    }
+    
     internal static ExcelMapperBase CreateMapper(Type type)
     {
         if (type.IsDefined(typeof(IndexedExcel)))

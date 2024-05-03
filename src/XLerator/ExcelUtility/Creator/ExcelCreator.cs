@@ -28,15 +28,20 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
     
     public IExcelEditor<T> CreateExcel(bool addHeader)
     {
+        var rowIndex = RowIndex;
+        
         using (var spreadsheetDocument = CreateFile())
         {
             if (addHeader)
             {
                 AddHeader(spreadsheetDocument);
+                rowIndex++;
             }
         }
         
-        return ExcelEditor<T>.Create(xLeratorOptions, excelMapper);
+        return ExcelEditor<T>.Create(xLeratorOptions, excelMapper)
+            .SetCurrentRow(rowIndex)
+            .SetSheetId(sheetId);
     }
 
     private SpreadsheetDocument CreateFile()

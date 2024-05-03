@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility;
 
-namespace XLerator.Tests;
+namespace XLerator.Tests.ExcelUtility;
 
 [TestFixture]
 public class ExcelCellTest

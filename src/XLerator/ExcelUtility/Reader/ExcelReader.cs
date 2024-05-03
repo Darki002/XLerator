@@ -3,7 +3,7 @@ using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Reader;
 
-internal class ExcelReader : IDisposable, IExcelReader
+internal class ExcelReader<T> : IExcelReader<T> where T : class
 {
     private readonly ExcelMapperBase excelMapper;
     
@@ -14,9 +14,9 @@ internal class ExcelReader : IDisposable, IExcelReader
         this.excelMapper = excelMapper;
     }
 
-    internal static ExcelReader Create(XLeratorOptions options, ExcelMapperBase excelMapper)
+    internal static ExcelReader<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
     {
-        var reader = new ExcelReader(excelMapper);
+        var reader = new ExcelReader<T>(excelMapper);
         reader.spreadsheet = SpreadsheetDocument.Open(options.GetFilePath(), false);
         return reader;
     }

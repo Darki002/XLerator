@@ -1,36 +1,47 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using XLerator.ExcelUtility.Editor;
 using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Creator;
 
 internal class ExcelCreator<T> : IExcelCreator<T> where T : class
 {
+    private const uint RowIndex = 0;
+    
     private readonly ExcelMapperBase excelMapper;
+    private readonly XLeratorOptions xLeratorOptions;
     
-    private SpreadsheetDocument spreadsheet = null!;
     private StringValue sheetId = null!;
-
-    private uint currentRow;
     
-    private ExcelCreator(ExcelMapperBase excelMapper)
+    private ExcelCreator(XLeratorOptions xLeratorOptions, ExcelMapperBase excelMapper)
     {
         this.excelMapper = excelMapper;
-        currentRow = 0;
+        this.xLeratorOptions = xLeratorOptions;
     }
 
-    internal static ExcelCreator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
+    internal static IExcelCreator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
     {
-        var reader = new ExcelCreator<T>(excelMapper);
-        reader.SetUpSpreadsheet(options);
+       return new ExcelCreator<T>(options, excelMapper);
+    }
+    
+    public IExcelEditor<T> CreateExcel(bool addHeader)
+    {
+        using (var spreadsheetDocument = CreateFile())
+        {
+            if (addHeader)
+            {
+                AddHeader(spreadsheetDocument);
+            }
+        }
         
-        return reader;
+        return ExcelEditor<T>.Create(xLeratorOptions, excelMapper);
     }
 
-    private void SetUpSpreadsheet(XLeratorOptions options)
+    private SpreadsheetDocument CreateFile()
     {
-        spreadsheet = SpreadsheetDocument.Create(options.FilePath, SpreadsheetDocumentType.Workbook);
+        var spreadsheet = SpreadsheetDocument.Create(xLeratorOptions.GetFilePath(), SpreadsheetDocumentType.Workbook);
         
         var workbookPart = spreadsheet.AddWorkbookPart();
         workbookPart.Workbook = new Workbook();
@@ -43,21 +54,17 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
         var sheet = new Sheet
         {
             Id = sheetId,
-            Name = options.WorkbookName
+            Name = xLeratorOptions.SheetNameOrDefault()
         };
         
         sheets?.Append(sheet);
         spreadsheet.Save();
+        return spreadsheet;
     }
     
-    public void CreateHeader()
+    private void AddHeader(SpreadsheetDocument spreadsheetDocument)
     {
-        if (currentRow > 0)
-        {
-            throw new InvalidOperationException("Can not create Header after there was already data written to the spreadsheet.");
-        }
-        
-        var propertyInfos = typeof(T).GetProperties();
+       var propertyInfos = typeof(T).GetProperties();
 
         var row = new List<ExcelCell<string>>();
         foreach (var propertyInfo in propertyInfos)
@@ -66,47 +73,10 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
             var col = excelMapper.GetColumnFor(propertyInfo.Name);
             if(header is null || col is null) continue;
             
-            row.Add(new ExcelCell<string>(col, currentRow, header));
+            row.Add(new ExcelCell<string>(col, RowIndex, header));
         }
-        SaveRowToSpreadsheet(row);
+        spreadsheetDocument.SaveRowToSpreadsheet(sheetId, 0, row);
     }
 
-    public void Write(T data)
-    {
-        
-    }
-
-    public void WriteMany(IEnumerable<T> rows)
-    { 
-        foreach (var row in rows)
-        {
-            
-        }
-    }
-
-    private void SaveRowToSpreadsheet<TRow>(List<ExcelCell<TRow>> row)
-    {
-        var worksheetPart = (WorksheetPart?)spreadsheet.WorkbookPart?.GetPartById(sheetId!);
-        if (worksheetPart is null)
-        {
-            throw new InvalidOperationException("The Worksheet was not initialized correctly.");
-        }
-        var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
-        var dataRow = new Row { RowIndex = currentRow };
-        
-        foreach (var data in row)
-        {
-            dataRow.AppendChild(data.ToCell());
-        }
-        
-        sheetData?.AppendChild(dataRow);
-        spreadsheet.Save();
-        currentRow++;
-    }
     
-    public void Dispose()
-    {
-        spreadsheet.Dispose();
-        spreadsheet = null!;
-    }
 }

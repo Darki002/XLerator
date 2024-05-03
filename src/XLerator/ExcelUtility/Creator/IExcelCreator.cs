@@ -1,26 +1,17 @@
-﻿namespace XLerator.ExcelUtility.Creator;
+﻿using XLerator.ExcelUtility.Editor;
+
+namespace XLerator.ExcelUtility.Creator;
 
 /// <summary>
 /// Creates a new spreadsheet. It will be structure based on <typeparamref name="T"/>.
 /// </summary>
 /// <typeparam name="T">The type of data and structure of the spreadsheet</typeparam>
-public interface IExcelCreator<in T> : IDisposable where T : class
+public interface IExcelCreator<in T> where T : class
 {
     /// <summary>
-    /// Creates a Header in the Excel, using <see cref="XLerator.Attributes.ExcelHeaderName"/> or else the Property Name.
-    /// <exception cref="InvalidOperationException">If you call this methode after any other methode was called that writes data to the spreadsheet</exception>
+    /// Creates a new Excel file and returns a new Instance of a <see cref="IExcelEditor{T}"/>.
     /// </summary>
-    void CreateHeader();
-
-    /// <summary>
-    /// Writes the data as a new row to the spreadsheet.
-    /// </summary>
-    /// <param name="data">The data for the new row</param>
-    void Write(T data);
-    
-    /// <summary>
-    /// Writes the data each Element of the Enumerable as new rows to the spreadsheet.
-    /// </summary>
-    /// <param name="data">The data for the new rows</param>
-    void WriteMany(IEnumerable<T> data);
+    /// <param name="addHeader">If True adds a header line on creation.</param>
+    /// <returns>The new Instance of a <see cref="IExcelEditor{T}"/>.</returns>
+    IExcelEditor<T> CreateExcel(bool addHeader);
 }

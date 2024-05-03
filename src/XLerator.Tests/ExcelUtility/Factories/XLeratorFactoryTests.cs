@@ -11,7 +11,7 @@ public class XLeratorFactoryTests
     public void CreateMapper_ReturnsHeaderExcelMapper_WhenClassHasNoAttribute()
     {
         // Act
-        var mapper = XLeratorFactory.CreateMapper(typeof(HeaderedExcelClass));
+        var mapper = XLeratorFactory<HeaderedExcelClass>.CreateMapper(typeof(HeaderedExcelClass));
         
         // Assert
         mapper.Should().BeOfType<HeaderExcelMapper>();
@@ -21,7 +21,7 @@ public class XLeratorFactoryTests
     public void CreateMapper_ReturnsIndexedExcelMapper_WhenAttributeIsOnClass()
     {
         // Act
-        var mapper = XLeratorFactory.CreateMapper(typeof(IndexedExcelClass));
+        var mapper = XLeratorFactory<IndexedExcelClass>.CreateMapper(typeof(IndexedExcelClass));
         
         // Assert
         mapper.Should().BeOfType<IndexedExcelMapper>();

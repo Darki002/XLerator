@@ -1,8 +1,39 @@
 ﻿namespace XLerator.ExcelUtility;
 
-public class XLeratorOptions(string filePath, string? workbookName)
+/// <summary>
+/// Options for the Excel file.
+/// </summary>
+public class XLeratorOptions
 {
-    public readonly string FilePath = filePath;
+    /// <summary>
+    /// Filepath to the Excel file or where the Excel file should be saved.
+    /// </summary>
+    public string? FilePath { get; set; } = null;
 
-    public readonly string? WorkbookName = workbookName;
+    /// <summary>
+    /// The name for the Sheet which will be read or created.
+    /// </summary>
+    public string? SheetName { get; set; } = null;
+
+    /// <summary>
+    /// The off set for where the first row is located in the Sheet.
+    /// </summary>
+    public uint rowOffSet { get; set; } = 0;
+
+    /// <summary>
+    /// The off set for where the first column is located in the Sheet.
+    /// </summary>
+    public uint columnOffSet { get; set; } = 0;
+
+    internal string GetFilePath()
+    {
+        if (FilePath is null)
+        {
+            throw new ArgumentNullException(nameof(FilePath), "File Path is requered.");
+        }
+
+        return FilePath;
+    }
+
+    internal string SheetNameOrDefault() => SheetName ?? "Sheet1";
 }

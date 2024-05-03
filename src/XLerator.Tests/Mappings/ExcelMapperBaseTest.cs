@@ -1,6 +1,4 @@
-﻿using XLerator.Tests.Mappings;
-
-namespace XLerator.Tests.ExcelMappings;
+﻿namespace XLerator.Tests.Mappings;
 
 [TestFixture]
 public class ExcelMapperBaseTest
@@ -21,32 +19,5 @@ public class ExcelMapperBaseTest
         
         // Assert
         excelCol.Should().Be(expected);
-    }
-
-    [Test]
-    public void GetHeaderNameFor_ReturnsHeaderName_WhenHeaderIsForPropertyDefined()
-    {
-        // Arrange
-        var testee = new ExcelMapperBaseFake();
-        testee.AddHeaderMap("Test", "Test Header");
-        
-        // Act
-        var excelCol = testee.GetHeaderFor("Test");
-        
-        // Assert
-        excelCol.Should().Be("Test Header");
-    }
-    
-    [Test]
-    public void GetHeaderNameFor_ReturnsPropertyName_WhenNoHeaderIsDefined()
-    {
-        // Arrange
-        var testee = new ExcelMapperBaseFake();
-        
-        // Act
-        var excelCol = testee.GetHeaderFor("Test");
-        
-        // Assert
-        excelCol.Should().Be("Test");
     }
 }

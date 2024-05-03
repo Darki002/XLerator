@@ -17,7 +17,7 @@ internal class ExcelReader : IDisposable, IExcelReader
     internal static ExcelReader Create(XLeratorOptions options, ExcelMapperBase excelMapper)
     {
         var reader = new ExcelReader(excelMapper);
-        reader.spreadsheet = SpreadsheetDocument.Open(options.FilePath, false);
+        reader.spreadsheet = SpreadsheetDocument.Open(options.GetFilePath(), false);
         return reader;
     }
     

@@ -4,18 +4,18 @@ namespace XLerator.ExcelUtility;
 
 internal struct ExcelCell(string column, uint row, object? data = null)
 {
-    public object? Data { get; set; } = data;
+    private object? data { get; set; } = data;
 
     private string CellReference => column + row;
     
     public Cell ToCell()
     {
-        if (Data is null)
+        if (data is null)
         {
             throw new InvalidOperationException("Not Data to convert to CellValue");
         }
         
-        return new Cell(new CellValue(Data.ToString()!))
+        return new Cell(new CellValue(data.ToString()!))
         {
             DataType = GetValueType(),
             CellReference = CellReference,
@@ -24,7 +24,7 @@ internal struct ExcelCell(string column, uint row, object? data = null)
 
     private CellValues GetValueType()
     {
-        var type = Data!.GetType();
+        var type = data!.GetType();
         if (type == typeof(string)) return CellValues.String;
         if (type == typeof(DateTime)) return CellValues.Date;
         if (type == typeof(bool)) return CellValues.Boolean;

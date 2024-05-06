@@ -69,7 +69,22 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
     
     private void AddHeader(SpreadsheetDocument spreadsheetDocument)
     {
-       var row = ExcelRow<T>.CreateHeader(RowIndex, excelMapper);
-       spreadsheetDocument.SaveRowToSpreadsheet(sheetId, 0, row);
+       var row = ExcelHeader<T>.CreateFrom(RowIndex, excelMapper);
+       
+       var worksheetPart = (WorksheetPart?)spreadsheetDocument.WorkbookPart?.GetPartById(sheetId!);
+       if (worksheetPart is null)
+       {
+           throw new InvalidOperationException("The Worksheet was not initialized correctly.");
+       }
+       var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
+       var dataRow = new Row { RowIndex = 0 };
+        
+       foreach (var data in row)
+       {
+           dataRow.AppendChild(data.ToCell());
+       }
+        
+       sheetData?.AppendChild(dataRow);
+       spreadsheetDocument.Save();
     }
 }

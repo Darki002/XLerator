@@ -21,7 +21,7 @@ public class ExcelRowTest
         var expected2 = new ExcelCell("B", 0, "Name");
         
         // Act
-        var testee = ExcelRow<HeaderedExcelClass>.CreateHeader(0, excelMapper);
+        var testee = ExcelHeader<HeaderedExcelClass>.CreateFrom(0, excelMapper);
         
         // Assert
         testee.Row.Should().HaveCount(2);
@@ -49,7 +49,7 @@ public class ExcelRowTest
         var expected2 = new ExcelCell("B", 0, data.Name);
         
         // Act
-        var testee = ExcelRow<HeaderedExcelClass>.CreateFrom(data, 0, excelMapper);
+        var testee = ExcelData<HeaderedExcelClass>.CreateFrom(data, 0, excelMapper);
         
         // Assert
         testee.Row.Should().HaveCount(2);

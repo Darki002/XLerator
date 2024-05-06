@@ -42,8 +42,7 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
     
     public void Write(T data)
     {
-        var row = ExcelRow<T>.CreateFrom(data, currentRow, excelMapper);
-        spreadsheet.SaveRowToSpreadsheet(GetSheetId(), 0, row);
+        var row = ExcelData<T>.CreateFrom(data, currentRow, excelMapper);
     }
 
     public void WriteMany(IEnumerable<T> data)

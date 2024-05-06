@@ -8,7 +8,7 @@ namespace XLerator.ExcelUtility.Creator;
 
 internal class ExcelCreator<T> : IExcelCreator<T> where T : class
 {
-    private const uint RowIndex = 0;
+    private const uint RowIndex = 1;
     
     private readonly ExcelMapperBase excelMapper;
     private readonly XLeratorOptions xLeratorOptions;
@@ -26,16 +26,13 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
     
     public IExcelEditor<T> CreateExcel(bool addHeader)
     {
-        var rowIndex = RowIndex;
-
-        var spreadsheetDocument = CreateFile(out var sheetId);
+       var spreadsheetDocument = CreateFile(out var sheetId);
         
         if (addHeader)
         {
             try
             {
                 AddHeader(spreadsheetDocument, sheetId);
-                rowIndex++;
             }
             catch
             {
@@ -47,7 +44,7 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
         spreadsheetDocument.Save();
         spreadsheetDocument.Dispose();
 
-        return ExcelEditor<T>.CreateFrom(xLeratorOptions, excelMapper, sheetId, rowIndex);
+        return ExcelEditor<T>.CreateFrom(xLeratorOptions, excelMapper, sheetId);
     }
 
     private SpreadsheetDocument CreateFile(out StringValue sheetId)
@@ -84,7 +81,7 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
            throw new InvalidOperationException("The Worksheet was not initialized correctly.");
        }
        var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
-       var dataRow = new Row { RowIndex = 0 };
+       var dataRow = new Row { RowIndex = RowIndex };
         
        Cell? lastCell = null;
        foreach (var cell in row)

@@ -23,7 +23,7 @@ public class ExcelEditorTest
         var sheetId = CreateFile(filePath, "Sheet1");
         
         // Act
-        var testee = ExcelEditor<Dummy>.CreateFrom(options, new ExcelMapperDummy(), sheetId, 1);
+        var testee = ExcelEditor<Dummy>.CreateFrom(options, new ExcelMapperDummy(), sheetId);
         
         // Assert
         testee.Spreadsheet.Should().NotBeNull();
@@ -78,7 +78,7 @@ public class ExcelEditorTest
         };
         
         var sheetId = CreateFile(filePath, "Sheet1");
-        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(options, new ExcelMapperDummy(), sheetId, 1);
+        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(options, new ExcelMapperDummy(), sheetId);
         
         // Act
         var data = new HeaderedExcelClass

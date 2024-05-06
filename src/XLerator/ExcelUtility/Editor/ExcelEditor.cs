@@ -12,12 +12,9 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
     internal SpreadsheetDocument Spreadsheet = null!;
     internal SheetData SheetData = null!;
     
-    private uint currentRow;
-    
     private ExcelEditor(ExcelMapperBase excelMapper)
     {
         this.excelMapper = excelMapper;
-        currentRow = 0;
     }
 
     internal static ExcelEditor<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
@@ -47,11 +44,10 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         throw new InvalidOperationException("The SheetData was not initialized correctly.");
     }
     
-    internal static ExcelEditor<T> CreateFrom(XLeratorOptions options, ExcelMapperBase excelMapper, StringValue sheetId, uint currentRow)
+    internal static ExcelEditor<T> CreateFrom(XLeratorOptions options, ExcelMapperBase excelMapper, StringValue sheetId)
     {
         var editor = new ExcelEditor<T>(excelMapper);
         
-        editor.currentRow = currentRow;
         editor.Spreadsheet = SpreadsheetDocument.Open(options.GetFilePath(), true);
         
         var worksheetPart = (WorksheetPart?)editor.Spreadsheet.WorkbookPart?.GetPartById(sheetId!);
@@ -72,9 +68,11 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
     {
         try
         {
-            var row = ExcelData<T>.CreateFrom(data, currentRow, excelMapper);
-            AddRow(row);
-            currentRow++;
+            var lastRow = SheetData.Elements<Row>().LastOrDefault();
+            var index = lastRow?.RowIndex ?? 1;
+            
+            var row = ExcelData<T>.CreateFrom(data, index, excelMapper);
+            AddRow(row, index);
             Spreadsheet.Save();
         }
         catch
@@ -90,9 +88,11 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         {
             foreach (var rowData in data)
             {
-                var row = ExcelData<T>.CreateFrom(rowData, currentRow, excelMapper);
-                AddRow(row);
-                currentRow++;
+                var lastRow = SheetData.Elements<Row>().LastOrDefault();
+                var index = lastRow?.RowIndex ?? 1;
+                
+                var row = ExcelData<T>.CreateFrom(rowData, index, excelMapper);
+                AddRow(row, index);
             }
             Spreadsheet.Save();
         }
@@ -103,35 +103,18 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         }
     }
 
-    private void AddRow(ExcelData<T> row)
+    private void AddRow(ExcelData<T> row, uint index)
     {
-        var lastRow = SheetData.Elements<Row>().LastOrDefault();
-        if (lastRow is null)
+        var dataRow = new Row { RowIndex = index };
+        
+        Cell? lastCell = null;
+        foreach (var cell in row)
         {
-            var dataRow = new Row { RowIndex = 0 };
-            
-            Cell? lastCell = null;
-            foreach (var cell in row)
-            {
-                var newCell = cell.ToCell();
-                dataRow.InsertAfter(newCell, lastCell);
-                lastCell = newCell;
-            }
-            SheetData.Append(dataRow);
+            var newCell = cell.ToCell();
+            dataRow.InsertAfter(newCell, lastCell);
+            lastCell = newCell;
         }
-        else
-        {
-            var dataRow = new Row { RowIndex = lastRow.RowIndex };
-            
-            Cell? lastCell = null;
-            foreach (var cell in row)
-            {
-                var newCell = cell.ToCell();
-                dataRow.InsertAfter(newCell, lastCell);
-                lastCell = newCell;
-            }
-            SheetData.Append(dataRow);
-        }
+        SheetData.Append(dataRow);
     }
     
     public void Dispose()

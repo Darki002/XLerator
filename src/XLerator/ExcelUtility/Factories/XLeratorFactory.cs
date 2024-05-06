@@ -1,17 +1,10 @@
-﻿using System.Reflection;
-using XLerator.Attributes;
-using XLerator.ExcelUtility.Creator;
-using XLerator.ExcelUtility.Editor;
-using XLerator.ExcelUtility.Reader;
-using XLerator.Mappings;
-
-namespace XLerator.ExcelUtility.Factories;
+﻿namespace XLerator.ExcelUtility.Factories;
 
 /// <summary>
-/// Factory that can create different different Instances of the Excel Utilities.
+/// Factory that can create different Instances of the Excel Utilities.
 /// </summary>
 /// <typeparam name="T">The type of data and structure of the spreadsheet </typeparam>
-public class XLeratorFactory<T> : IXLeratorFactory<T> where T : class
+public partial class XLeratorFactory<T> : IXLeratorFactory<T> where T : class
 {
     private readonly XLeratorOptions options;
     
@@ -28,33 +21,5 @@ public class XLeratorFactory<T> : IXLeratorFactory<T> where T : class
     public static IXLeratorFactory<T> CreateFactory(XLeratorOptions options)
     {
         return new XLeratorFactory<T>(options);
-    }
-
-    public IExcelCreator<T> CreateExcelCreator()
-    {
-        var mapper = CreateMapper(typeof(T));
-        return ExcelCreator<T>.Create(options, mapper);
-    }
-    
-    public IExcelReader<T> CreateReader() 
-    {
-        var mapper = CreateMapper(typeof(T));
-        return ExcelReader<T>.Create(options, mapper);
-    }
-    
-    public IExcelEditor<T> CreateExcelEditor()
-    {
-        var mapper = CreateMapper(typeof(T));
-        return ExcelEditor<T>.Create(options, mapper);
-    }
-    
-    internal static ExcelMapperBase CreateMapper(Type type)
-    {
-        if (type.IsDefined(typeof(IndexedExcel)))
-        {
-            return IndexedExcelMapper.CreateFrom(type);
-        }
-        
-        return HeaderExcelMapper.CreateFrom(type);
     }
 }

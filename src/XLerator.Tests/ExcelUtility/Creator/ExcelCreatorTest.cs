@@ -99,13 +99,13 @@ public class ExcelCreatorTest
 
             // Assert
             rows.Should().NotBeNull();
-            rows!.Count.Should().BeGreaterThan(0);
+            rows!.Count.Should().Be(1);
 
             var headerRow = rows.First();
             var cells = headerRow.Elements<Cell>().ToList();
             
             // Assert
-            cells.Count.Should().BeGreaterThan(0);
+            cells.Count.Should().Be(2);
 
             var firstHeaderValue = cells[0].InnerText;
             var secondHeaderValue = cells[1].InnerText;

@@ -40,7 +40,7 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
             spreadsheetDocument.Save();
         }
 
-        return ExcelEditor<T>.Create(xLeratorOptions, excelMapper, sheetId, rowIndex);
+        return ExcelEditor<T>.CreateFrom(xLeratorOptions, excelMapper, sheetId, rowIndex);
     }
 
     private SpreadsheetDocument CreateFile()
@@ -53,11 +53,12 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
         var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
         worksheetPart.Worksheet = new Worksheet(new SheetData());
         
-        var sheets = spreadsheet.WorkbookPart?.Workbook.AppendChild(new Sheets());
-        sheetId = spreadsheet.WorkbookPart?.GetIdOfPart(worksheetPart);
+        var sheets = workbookPart.Workbook.AppendChild(new Sheets());
+        sheetId = workbookPart.GetIdOfPart(worksheetPart);
         var sheet = new Sheet
         {
             Id = sheetId,
+            SheetId = 1,
             Name = xLeratorOptions.GetSheetNameOrDefault()
         };
         

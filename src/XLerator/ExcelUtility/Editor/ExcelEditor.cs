@@ -25,6 +25,9 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         var editor = new ExcelEditor<T>(excelMapper);
         editor.Spreadsheet = SpreadsheetDocument.Open(options.GetFilePath(), true);
         editor.SheetData = editor.GetWorksheetPartByName(options.GetSheetNameOrDefault());
+        
+        // TODO find currentRow out. Look through all rows until one is empty
+        
         return editor;
     }
     
@@ -44,7 +47,7 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         throw new InvalidOperationException("The SheetData was not initialized correctly.");
     }
     
-    internal static ExcelEditor<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper, StringValue sheetId, uint currentRow)
+    internal static ExcelEditor<T> CreateFrom(XLeratorOptions options, ExcelMapperBase excelMapper, StringValue sheetId, uint currentRow)
     {
         var editor = new ExcelEditor<T>(excelMapper);
         

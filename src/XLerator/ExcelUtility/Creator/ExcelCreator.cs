@@ -90,11 +90,11 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
        foreach (var cell in row)
        {
            var newCell = cell.ToCell();
-           dataRow.InsertBefore(newCell, lastCell);
+           dataRow.InsertAfter(newCell, lastCell);
            lastCell = newCell;
        }
         
-       sheetData?.InsertAt(dataRow, 0);
+       sheetData?.Append(dataRow);
        worksheetPart.Worksheet.Save();
     }
 }

@@ -40,13 +40,5 @@ internal struct ExcelCell(string column, uint row, object? data = null)
         return typeCode is TypeCode.Int32 or TypeCode.UInt32 or TypeCode.Int16 or TypeCode.UInt16 or TypeCode.Int64 or TypeCode.UInt64 or TypeCode.Single or TypeCode.Double or TypeCode.Decimal;
     }
 
-    private string GetCellReference()
-    {
-        if (row <= 0)
-        {
-            throw new ArgumentException("RowIndex must be greater then Zero");
-        }
-
-        return $"{column}{row}";
-    }
+    private string GetCellReference() => $"{column}{row}";
 }

@@ -114,10 +114,10 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
             foreach (var cell in row)
             {
                 var newCell = cell.ToCell();
-                dataRow.InsertBefore(newCell, lastCell);
+                dataRow.InsertAfter(newCell, lastCell);
                 lastCell = newCell;
             }
-            SheetData.InsertAt(dataRow, 0);
+            SheetData.Append(dataRow);
         }
         else
         {
@@ -127,10 +127,10 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
             foreach (var cell in row)
             {
                 var newCell = cell.ToCell();
-                dataRow.InsertBefore(newCell, lastCell);
+                dataRow.InsertAfter(newCell, lastCell);
                 lastCell = newCell;
             }
-            SheetData.InsertAfter(dataRow, lastRow);
+            SheetData.Append(dataRow);
         }
     }
     

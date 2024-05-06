@@ -5,7 +5,7 @@ using XLerator.ExcelUtility.Reader;
 namespace XLerator.ExcelUtility.Factories;
 
 /// <summary>
-/// Factory that can create different different Instances of the Excel Utilities.
+/// Factory that can create different Instances of the Excel Utilities.
 /// </summary>
 /// <typeparam name="T">The type of data and structure of the spreadsheet </typeparam>
 public interface IXLeratorFactory<in T> where T : class

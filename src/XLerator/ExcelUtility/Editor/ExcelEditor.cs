@@ -70,34 +70,68 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
     
     public void Write(T data)
     {
-        var row = ExcelData<T>.CreateFrom(data, currentRow, excelMapper);
-        var dataRow = new Row { RowIndex = currentRow };
-        
-        foreach (var cell in row)
+        try
         {
-            dataRow.AppendChild(cell.ToCell());
+            var row = ExcelData<T>.CreateFrom(data, currentRow, excelMapper);
+            AddRow(row);
+            currentRow++;
+            Spreadsheet.Save();
         }
-        
-        SheetData.AppendChild(dataRow);
-        Spreadsheet.Save();
+        catch
+        {
+            Spreadsheet.Save();
+            throw;
+        }
     }
 
     public void WriteMany(IEnumerable<T> data)
     {
-        foreach (var rowData in data)
+        try
         {
-            var row = ExcelData<T>.CreateFrom(rowData, currentRow, excelMapper);
-            var dataRow = new Row { RowIndex = currentRow };
+            foreach (var rowData in data)
+            {
+                var row = ExcelData<T>.CreateFrom(rowData, currentRow, excelMapper);
+                AddRow(row);
+                currentRow++;
+            }
+            Spreadsheet.Save();
+        }
+        catch
+        {
+            Spreadsheet.Save();
+            throw;
+        }
+    }
+
+    private void AddRow(ExcelData<T> row)
+    {
+        var lastRow = SheetData.Elements<Row>().LastOrDefault();
+        if (lastRow is null)
+        {
+            var dataRow = new Row { RowIndex = 0 };
             
+            Cell? lastCell = null;
             foreach (var cell in row)
             {
-                dataRow.AppendChild(cell.ToCell());
+                var newCell = cell.ToCell();
+                dataRow.InsertBefore(newCell, lastCell);
+                lastCell = newCell;
             }
-            
-            SheetData.AppendChild(dataRow);
+            SheetData.InsertAt(dataRow, 0);
         }
-        
-        Spreadsheet.Save();
+        else
+        {
+            var dataRow = new Row { RowIndex = lastRow.RowIndex };
+            
+            Cell? lastCell = null;
+            foreach (var cell in row)
+            {
+                var newCell = cell.ToCell();
+                dataRow.InsertBefore(newCell, lastCell);
+                lastCell = newCell;
+            }
+            SheetData.InsertAfter(dataRow, lastRow);
+        }
     }
     
     public void Dispose()

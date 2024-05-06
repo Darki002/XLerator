@@ -13,8 +13,6 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
     private readonly ExcelMapperBase excelMapper;
     private readonly XLeratorOptions xLeratorOptions;
     
-    private StringValue sheetId = null!;
-    
     private ExcelCreator(XLeratorOptions xLeratorOptions, ExcelMapperBase excelMapper)
     {
         this.excelMapper = excelMapper;
@@ -29,21 +27,30 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
     public IExcelEditor<T> CreateExcel(bool addHeader)
     {
         var rowIndex = RowIndex;
+
+        var spreadsheetDocument = CreateFile(out var sheetId);
         
-        using (var spreadsheetDocument = CreateFile())
+        if (addHeader)
         {
-            if (addHeader)
+            try
             {
-                AddHeader(spreadsheetDocument);
+                AddHeader(spreadsheetDocument, sheetId);
                 rowIndex++;
             }
-            spreadsheetDocument.Save();
+            catch
+            {
+                spreadsheetDocument.Save();
+                spreadsheetDocument.Dispose();
+                throw;
+            }
         }
+        spreadsheetDocument.Save();
+        spreadsheetDocument.Dispose();
 
         return ExcelEditor<T>.CreateFrom(xLeratorOptions, excelMapper, sheetId, rowIndex);
     }
 
-    private SpreadsheetDocument CreateFile()
+    private SpreadsheetDocument CreateFile(out StringValue sheetId)
     {
         var spreadsheet = SpreadsheetDocument.Create(xLeratorOptions.GetFilePath(), SpreadsheetDocumentType.Workbook);
         
@@ -62,11 +69,12 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
             Name = xLeratorOptions.GetSheetNameOrDefault()
         };
         
-        sheets?.Append(sheet);
+        sheets.Append(sheet);
+        spreadsheet.Save();
         return spreadsheet;
     }
     
-    private void AddHeader(SpreadsheetDocument spreadsheetDocument)
+    private void AddHeader(SpreadsheetDocument spreadsheetDocument, StringValue sheetId)
     {
        var row = ExcelHeader<T>.CreateFrom(RowIndex, excelMapper);
        
@@ -78,11 +86,15 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
        var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
        var dataRow = new Row { RowIndex = 0 };
         
+       Cell? lastCell = null;
        foreach (var cell in row)
        {
-           dataRow.AppendChild(cell.ToCell());
+           var newCell = cell.ToCell();
+           dataRow.InsertBefore(newCell, lastCell);
+           lastCell = newCell;
        }
         
-       sheetData?.AppendChild(dataRow);
+       sheetData?.InsertAt(dataRow, 0);
+       worksheetPart.Worksheet.Save();
     }
 }

@@ -1,25 +1,28 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using System.Security;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace XLerator.ExcelUtility;
 
 internal struct ExcelCell(string column, uint row, object? data = null)
 {
     private object? data { get; set; } = data;
-
-    private string CellReference => column + row;
     
     public Cell ToCell()
     {
-        if (data is null)
+        var text = data?.ToString();
+        if (text is null)
         {
             throw new InvalidOperationException("Not Data to convert to CellValue");
         }
-        
-        return new Cell(new CellValue(data.ToString()!))
+
+        var cell = new Cell
         {
-            DataType = GetValueType(),
-            CellReference = CellReference,
+            DataType = new EnumValue<CellValues>(GetValueType()),
+            CellReference = GetCellReference(),
+            CellValue = new CellValue(SecurityElement.Escape(text))
         };
+        return cell;
     }
 
     private CellValues GetValueType()
@@ -35,5 +38,15 @@ internal struct ExcelCell(string column, uint row, object? data = null)
     {
         var typeCode = Type.GetTypeCode(type);
         return typeCode is TypeCode.Int32 or TypeCode.UInt32 or TypeCode.Int16 or TypeCode.UInt16 or TypeCode.Int64 or TypeCode.UInt64 or TypeCode.Single or TypeCode.Double or TypeCode.Decimal;
+    }
+
+    private string GetCellReference()
+    {
+        if (row <= 0)
+        {
+            throw new ArgumentException("RowIndex must be greater then Zero");
+        }
+
+        return $"{column}{row}";
     }
 }

@@ -37,11 +37,10 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
                 AddHeader(spreadsheetDocument);
                 rowIndex++;
             }
+            spreadsheetDocument.Save();
         }
-        
-        return ExcelEditor<T>.Create(xLeratorOptions, excelMapper)
-            .SetCurrentRow(rowIndex)
-            .SetSheetId(sheetId);
+
+        return ExcelEditor<T>.Create(xLeratorOptions, excelMapper, sheetId, rowIndex);
     }
 
     private SpreadsheetDocument CreateFile()
@@ -63,7 +62,6 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
         };
         
         sheets?.Append(sheet);
-        spreadsheet.Save();
         return spreadsheet;
     }
     
@@ -79,12 +77,11 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
        var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
        var dataRow = new Row { RowIndex = 0 };
         
-       foreach (var data in row)
+       foreach (var cell in row)
        {
-           dataRow.AppendChild(data.ToCell());
+           dataRow.AppendChild(cell.ToCell());
        }
         
        sheetData?.AppendChild(dataRow);
-       spreadsheetDocument.Save();
     }
 }

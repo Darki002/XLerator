@@ -11,10 +11,10 @@ internal class Spreadsheet : IDisposable
     public WorkbookPart WorkbookPart { get; private set; }
 
     public WorksheetPart WorksheetPart { get; private set; }
-
+    
+    public SheetData SheetData { get; private set; }
+    
     public Sheets Sheets { get; private set; }
-
-    public StringValue SheetId { get; private set; }
 
     public Sheet Sheet { get; private set; }
 
@@ -22,15 +22,15 @@ internal class Spreadsheet : IDisposable
         SpreadsheetDocument document, 
         WorkbookPart workbookPart, 
         WorksheetPart worksheetPart, 
+        SheetData sheetData,
         Sheets sheets, 
-        StringValue sheetId, 
         Sheet sheet)
     {
         Document = document;
         WorkbookPart = workbookPart;
         WorksheetPart = worksheetPart;
+        SheetData = sheetData;
         Sheets = sheets;
-        SheetId = sheetId;
         Sheet = sheet;
     }
 
@@ -53,6 +53,8 @@ internal class Spreadsheet : IDisposable
             Name = options.GetSheetNameOrDefault()
         };
         
+        var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>()!;
+        
         sheets.Append(sheet);
         document.Save();
         
@@ -60,15 +62,50 @@ internal class Spreadsheet : IDisposable
             document: document,
             workbookPart: workbookPart,
             worksheetPart: worksheetPart,
+            sheetData: sheetData,
             sheets: sheets,
-            sheetId: sheetId,
             sheet: sheet);
         return spreadsheet;
     }
-    
-    public SheetData? GetSheetData()
+
+    public static Spreadsheet Open(XLeratorOptions options, bool isEditable)
     {
-        return WorksheetPart.Worksheet.GetFirstChild<SheetData>();
+        var document = SpreadsheetDocument.Open(options.GetFilePath(), isEditable);
+        var result = GetWorksheetPartByName(document, options.GetSheetNameOrDefault());
+        var workbookPart = document.WorkbookPart!;
+        
+            var spreadsheet = new Spreadsheet(
+            document: document,
+            workbookPart: workbookPart,
+            worksheetPart: result.worksheetPart,
+            sheetData: result.sheetData,
+            sheets: result.sheets,
+            sheet: result.sheet);
+        return spreadsheet;
+    }
+    
+    private static (WorksheetPart worksheetPart, Sheets sheets, Sheet sheet, SheetData sheetData) GetWorksheetPartByName(SpreadsheetDocument document, string sheetName)
+    {
+        var sheets = document.WorkbookPart?.Workbook.Sheets!;
+        foreach (var sheet in sheets.Elements<Sheet>())
+        {
+            if (sheet.Name != sheetName || sheet.Id == null)
+            {
+                continue;
+            }
+            var worksheetPart = (WorksheetPart)document.WorkbookPart?.GetPartById(sheet.Id!)!;
+            var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>()!;
+            return (worksheetPart, sheets, sheet, sheetData);
+        }
+
+        throw new InvalidOperationException("The SheetData was not initialized correctly.");
+    }
+    
+    public Row? LastRowOrDefault() => SheetData.Elements<Row>().LastOrDefault();
+
+    public void AppendRow(Row row)
+    {
+        SheetData.Append(row);
     }
 
     public void Save()
@@ -87,8 +124,8 @@ internal class Spreadsheet : IDisposable
         Document = null!;
         WorkbookPart = null!;
         WorksheetPart = null!;
+        SheetData = null!;
         Sheets = null!;
-        SheetId = null!;
         Sheet = null!;
     }
 }

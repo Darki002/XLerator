@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Editor;
@@ -10,7 +9,7 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
 
     private readonly XLeratorOptions options;
     
-    private readonly Spreadsheet spreadsheet;
+    private Spreadsheet spreadsheet;
     
     private ExcelEditor(Spreadsheet spreadsheet, ExcelMapperBase excelMapper, XLeratorOptions options)
     {
@@ -21,29 +20,8 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
 
     internal static ExcelEditor<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
     {
-        var editor = new ExcelEditor<T>(excelMapper);
-        editor.spreadsheet = SpreadsheetDocument.Open(options.GetFilePath(), true);
-        editor.SheetData = editor.GetWorksheetPartByName(options.GetSheetNameOrDefault());
-        
-        // TODO find currentRow out. Look through all rows until one is empty
-        
-        return editor;
-    }
-    
-    private SheetData GetWorksheetPartByName(string sheetName)
-    {
-        var sheets = ExcelUtility.Spreadsheet.WorkbookPart?.Workbook.Sheets!;
-        foreach (var sheet in sheets.Elements<Sheet>())
-        {
-            if (sheet.Name != sheetName || sheet.Id == null)
-            {
-                continue;
-            }
-            var worksheetPart = (WorksheetPart)ExcelUtility.Spreadsheet.WorkbookPart?.GetPartById(sheet.Id!)!;
-            return worksheetPart.Worksheet.GetFirstChild<SheetData>()!;
-        }
-
-        throw new InvalidOperationException("The SheetData was not initialized correctly.");
+        var spreadsheet = Spreadsheet.Open(options, true);
+        return new ExcelEditor<T>(spreadsheet, excelMapper, options);
     }
     
     internal static ExcelEditor<T> CreateFrom(Spreadsheet spreadsheet, ExcelMapperBase excelMapper, XLeratorOptions options)
@@ -55,7 +33,7 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
     {
         try
         {
-            var lastRow = spreadsheet.GetSheetData()?.Elements<Row>().LastOrDefault();
+            var lastRow = spreadsheet.LastRowOrDefault();
             var index = lastRow?.RowIndex ?? 1;
             
             var row = ExcelData<T>.CreateFrom(data, index, excelMapper);
@@ -75,8 +53,8 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         {
             foreach (var rowData in data)
             {
-                var lastRow = spreadsheet.GetSheetData()?.Elements<Row>().LastOrDefault();
-                var index = lastRow?.RowIndex ?? 1;
+                var lastRow = spreadsheet.LastRowOrDefault();
+                var index = lastRow?.RowIndex ?? 1u;
                 
                 var row = ExcelData<T>.CreateFrom(rowData, index, excelMapper);
                 AddRow(row, index);
@@ -101,7 +79,7 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
             dataRow.InsertAfter(newCell, lastCell);
             lastCell = newCell;
         }
-        spreadsheet.GetSheetData()?.Append(dataRow);
+        spreadsheet.AppendRow(dataRow);
     }
     
     public void Dispose()

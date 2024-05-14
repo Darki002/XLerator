@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility.Editor;
 using XLerator.Mappings;
 
@@ -50,8 +48,6 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
     private void AddHeader(Spreadsheet spreadsheet)
     {
        var row = ExcelHeader<T>.CreateFrom(RowIndex, excelMapper);
-       
-       var sheetData = spreadsheet.GetSheetData();
        var dataRow = new Row { RowIndex = RowIndex };
         
        Cell? lastCell = null;
@@ -62,7 +58,7 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
            lastCell = newCell;
        }
         
-       sheetData?.Append(dataRow);
+       spreadsheet.AppendRow(dataRow);
        spreadsheet.SaveWorksheet();
     }
 }

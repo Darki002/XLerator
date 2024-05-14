@@ -105,11 +105,18 @@ internal class Spreadsheet : IDisposable
 
     public void AppendRow(Row row)
     {
+        var existingRow = SheetData.Elements<Row>().FirstOrDefault(r => r.RowIndex == row.RowIndex);
+        if (existingRow != null)
+        {
+            SheetData.RemoveChild(existingRow);
+        }
+        
         SheetData.Append(row);
     }
 
     public void Save()
     {
+        WorksheetPart.Worksheet.Save();
         Document.Save();
     }
 

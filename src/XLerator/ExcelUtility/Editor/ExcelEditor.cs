@@ -33,11 +33,8 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
     {
         try
         {
-            var lastRow = spreadsheet.LastRowOrDefault();
-            var index = lastRow?.RowIndex ?? 1;
-            
-            var row = ExcelData<T>.CreateFrom(data, index, excelMapper);
-            AddRow(row, index);
+            var row = CreateNewRow(data);
+            AddRow(row);
             spreadsheet.Save();
         }
         catch
@@ -53,11 +50,8 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         {
             foreach (var rowData in data)
             {
-                var lastRow = spreadsheet.LastRowOrDefault();
-                var index = lastRow?.RowIndex ?? 1u;
-                
-                var row = ExcelData<T>.CreateFrom(rowData, index, excelMapper);
-                AddRow(row, index);
+                var row = CreateNewRow(rowData);
+                AddRow(row);
             }
             spreadsheet.Save();
         }
@@ -68,9 +62,16 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         }
     }
 
-    private void AddRow(ExcelData<T> row, uint index)
+    private ExcelData<T> CreateNewRow(T data)
     {
-        var dataRow = new Row { RowIndex = index };
+        var lastRow = spreadsheet.LastRowOrDefault();
+        var index = lastRow?.RowIndex ?? 0u;
+        return ExcelData<T>.CreateFrom(data, index + 1, excelMapper);
+    }
+
+    private void AddRow(ExcelData<T> row)
+    {
+        var dataRow = new Row { RowIndex = row.RowIndex };
         
         Cell? lastCell = null;
         foreach (var cell in row)

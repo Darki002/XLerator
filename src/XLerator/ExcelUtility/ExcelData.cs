@@ -4,21 +4,24 @@ namespace XLerator.ExcelUtility;
 
 internal class ExcelData<T> : ExcelRow where T : class
 {
+    public readonly uint RowIndex;
+    
     private readonly T? data;
 
-    private ExcelData(T? data)
+    private ExcelData(T? data, uint rowIndex)
     {
-        this.data = data;   
+        this.data = data;
+        this.RowIndex = rowIndex;
     }
     
     internal static ExcelData<T> CreateFrom(T data, uint rowIndex, ExcelMapperBase excelMapper)
     {
-        var row = new ExcelData<T>(data);
-        row.CreateCells(rowIndex, excelMapper);
+        var row = new ExcelData<T>(data, rowIndex);
+        row.CreateCells(excelMapper);
         return row;
     }
     
-    private void CreateCells(uint rowIndex, ExcelMapperBase excelMapper)
+    private void CreateCells(ExcelMapperBase excelMapper)
     {
         var propertyInfos = data!.GetType().GetProperties();
         foreach (var propertyInfo in propertyInfos)
@@ -34,7 +37,7 @@ internal class ExcelData<T> : ExcelRow where T : class
                 value = Convert.ChangeType(value, type);
             }
             
-            Row.Add(new ExcelCell(col, rowIndex, value));
+            Row.Add(new ExcelCell(col, RowIndex, value!));
         }
     }
 }

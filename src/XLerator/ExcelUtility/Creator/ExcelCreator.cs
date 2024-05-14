@@ -41,7 +41,7 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
         }
         spreadsheet.Save();
 
-        return ExcelEditor<T>.CreateFrom(spreadsheet, excelMapper, xLeratorOptions);
+        return ExcelEditor<T>.CreateFrom(spreadsheet, excelMapper);
     }
     
     private void AddHeader(Spreadsheet spreadsheet)

@@ -1,6 +1,6 @@
 ﻿namespace XLerator.Tests;
 
-[TestFixture]
+[SetUpFixture]
 public static class TestEnvironment
 {
     public static readonly List<string> FilePaths = new List<string>();

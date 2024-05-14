@@ -23,4 +23,8 @@ public interface IExcelEditor<in T> : IDisposable where T : class
     /// </summary>
     /// <param name="data">The data for the new rows</param>
     void WriteMany(IEnumerable<T> data);
+    
+    // TODO: Provide functions to edit more precise
+    // - Edit one cell
+    // - Edit an existing row / overwrite / add row where you want
 }

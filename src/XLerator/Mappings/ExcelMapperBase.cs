@@ -34,4 +34,6 @@ internal abstract class ExcelMapperBase
           }
           return columnName;
      }
+     
+     // TODO: allow to add old mappings, in case the class used to be different, so that the old data still can be read.
 }

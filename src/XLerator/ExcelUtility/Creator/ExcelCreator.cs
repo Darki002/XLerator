@@ -26,61 +26,32 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
     
     public IExcelEditor<T> CreateExcel(bool addHeader)
     {
-       var spreadsheetDocument = CreateFile(out var sheetId);
+       var spreadsheet = Spreadsheet.Create(xLeratorOptions);
         
         if (addHeader)
         {
             try
             {
-                AddHeader(spreadsheetDocument, sheetId);
+                AddHeader(spreadsheet);
             }
             catch
             {
-                spreadsheetDocument.Save();
-                spreadsheetDocument.Dispose();
+                spreadsheet.Save();
+                spreadsheet.Dispose();
                 throw;
             }
         }
-        spreadsheetDocument.Save();
-        spreadsheetDocument.Dispose();
-
-        return ExcelEditor<T>.CreateFrom(xLeratorOptions, excelMapper, sheetId);
-    }
-
-    private SpreadsheetDocument CreateFile(out StringValue sheetId)
-    {
-        var spreadsheet = SpreadsheetDocument.Create(xLeratorOptions.GetFilePath(), SpreadsheetDocumentType.Workbook);
-        
-        var workbookPart = spreadsheet.AddWorkbookPart();
-        workbookPart.Workbook = new Workbook();
-        
-        var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
-        worksheetPart.Worksheet = new Worksheet(new SheetData());
-        
-        var sheets = workbookPart.Workbook.AppendChild(new Sheets());
-        sheetId = workbookPart.GetIdOfPart(worksheetPart);
-        var sheet = new Sheet
-        {
-            Id = sheetId,
-            SheetId = 1,
-            Name = xLeratorOptions.GetSheetNameOrDefault()
-        };
-        
-        sheets.Append(sheet);
         spreadsheet.Save();
-        return spreadsheet;
+        spreadsheet.Dispose();
+
+        return ExcelEditor<T>.CreateFrom(spreadsheet, excelMapper, xLeratorOptions);
     }
     
-    private void AddHeader(SpreadsheetDocument spreadsheetDocument, StringValue sheetId)
+    private void AddHeader(Spreadsheet spreadsheet)
     {
        var row = ExcelHeader<T>.CreateFrom(RowIndex, excelMapper);
        
-       var worksheetPart = (WorksheetPart?)spreadsheetDocument.WorkbookPart?.GetPartById(sheetId!);
-       if (worksheetPart is null)
-       {
-           throw new InvalidOperationException("The Worksheet was not initialized correctly.");
-       }
-       var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>();
+       var sheetData = spreadsheet.GetSheetData();
        var dataRow = new Row { RowIndex = RowIndex };
         
        Cell? lastCell = null;
@@ -92,6 +63,6 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
        }
         
        sheetData?.Append(dataRow);
-       worksheetPart.Worksheet.Save();
+       spreadsheet.SaveWorksheet();
     }
 }

@@ -11,74 +11,18 @@ namespace XLerator.Tests.ExcelUtility.Editor;
 public class ExcelEditorTest
 {
     [Test]
-    public void CreateFrom_InitializedCorrectly()
-    {
-        // Arrange
-        const string filePath = "./CreateFrom_InitializedCorrectly.xlsx";
-        var options = new XLeratorOptions
-        {
-            FilePath = filePath
-        };
-        
-        var sheetId = CreateFile(filePath, "Sheet1");
-        
-        // Act
-        var testee = ExcelEditor<Dummy>.CreateFrom(options, new ExcelMapperDummy(), sheetId);
-        
-        // Assert
-        testee.Spreadsheet.Should().NotBeNull();
-        testee.SheetData.Should().NotBeNull();
-        
-        // Clean Up
-        testee.Dispose();
-        if (File.Exists(filePath))
-        {
-            File.Delete(filePath);
-        }
-    }
-    
-    [Test]
-    public void Create_InitializedCorrectly()
-    {
-        // Arrange
-        const string filePath = "./Create_InitializedCorrectly.xlsx";
-        const string sheetName = "Sheet1";
-        
-        var options = new XLeratorOptions
-        {
-            FilePath = filePath,
-            SheetName = sheetName
-        };
-        
-        CreateFile(filePath, sheetName);
-        
-        // Act
-        var testee = ExcelEditor<Dummy>.Create(options, new ExcelMapperDummy());
-        
-        // Assert
-        testee.Spreadsheet.Should().NotBeNull();
-        testee.SheetData.Should().NotBeNull();
-        
-        // Clean Up
-        testee.Dispose();
-        if (File.Exists(filePath))
-        {
-            File.Delete(filePath);
-        }
-    }
-
-    [Test]
     public void Write_AddsNewRowToSpreadSheet()
     {
         // Arrange
         const string filePath = "./Write_AddsNewRowToSpreadSheet.xlsx";
         var options = new XLeratorOptions
         {
-            FilePath = filePath
+            FilePath = filePath,
+            SheetName = "Sheet1"
         };
+        var spreadsheet = Spreadsheet.Create(options);
         
-        var sheetId = CreateFile(filePath, "Sheet1");
-        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(options, new ExcelMapperDummy(), sheetId);
+        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, new ExcelMapperDummy(), options);
         
         // Act
         var data = new HeaderedExcelClass

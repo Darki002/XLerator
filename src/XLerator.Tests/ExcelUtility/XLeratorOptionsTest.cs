@@ -43,6 +43,7 @@ public class XLeratorOptionsTest
         // Arrange
         var testee = new XLeratorOptions
         {
+            FilePath = "",
             SheetName = "test"
         };
         
@@ -59,6 +60,7 @@ public class XLeratorOptionsTest
         // Arrange
         var testee = new XLeratorOptions
         {
+            FilePath = "",
             SheetName = null
         };
         

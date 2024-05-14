@@ -8,7 +8,7 @@ public class XLeratorOptions
     /// <summary>
     /// Filepath to the Excel file or where the Excel file should be saved.
     /// </summary>
-    public string? FilePath { get; set; } = null;
+    public required string FilePath { get; set; } = null;
 
     /// <summary>
     /// The name for the Sheet which will be read or created.

@@ -127,6 +127,7 @@ internal class Spreadsheet : IDisposable
 
     public void Dispose()
     {
+        Save();
         Document.Dispose();
         Document = null!;
         WorkbookPart = null!;

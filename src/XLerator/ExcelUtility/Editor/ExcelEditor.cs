@@ -44,7 +44,11 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         }
     }
 
-    public void WriteMany(IEnumerable<T> data)
+    public void WriteMany(params T[] data) => WriteRows(data);
+    
+    public void WriteMany(IEnumerable<T> data) => WriteRows(data);
+
+    internal void WriteRows(IEnumerable<T> data)
     {
         try
         {

@@ -11,6 +11,12 @@ public interface IExcelEditor<in T> : IDisposable where T : class
     /// </summary>
     /// <param name="data">The data for the new row</param>
     void Write(T data);
+
+    /// <summary>
+    /// Writes each Element as new rows to the spreadsheet.
+    /// </summary>
+    /// <param name="data">The data for the new rows</param>
+    void WriteMany(params T[] data);
     
     /// <summary>
     /// Writes each Element of the Enumerable as new rows to the spreadsheet.

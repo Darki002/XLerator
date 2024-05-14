@@ -1,6 +1,6 @@
 ﻿namespace XLerator.Mappings;
 
-public abstract class ExcelMapperBase
+internal abstract class ExcelMapperBase
 { 
      internal readonly Dictionary<string, int> PropertyIndexMap = new Dictionary<string, int>();
 

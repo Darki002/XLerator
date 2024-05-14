@@ -2,7 +2,7 @@
 
 namespace XLerator.Tests.ExcelUtility;
 
-public class ExcelMapperDummy : ExcelMapperBase
+internal class ExcelMapperDummy : ExcelMapperBase
 {
     public override string? GetHeaderFor(string propertyName)
     {

@@ -4,13 +4,13 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace XLerator.ExcelUtility;
 
-internal struct ExcelCell(string column, uint row, object? data = null)
+internal struct ExcelCell(string column, uint row, object data)
 {
-    private object? data { get; set; } = data;
+    private object Data { get; } = data;
     
     public Cell ToCell()
     {
-        var text = data?.ToString();
+        var text = Data.ToString();
         if (text is null)
         {
             throw new InvalidOperationException("Not Data to convert to CellValue");
@@ -27,7 +27,7 @@ internal struct ExcelCell(string column, uint row, object? data = null)
 
     private CellValues GetValueType()
     {
-        var type = data!.GetType();
+        var type = Data.GetType();
         if (type == typeof(string)) return CellValues.String;
         if (type == typeof(DateTime)) return CellValues.Date;
         if (type == typeof(bool)) return CellValues.Boolean;

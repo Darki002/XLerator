@@ -60,18 +60,4 @@ public class ExcelCellTest
         // Assert
         cell.DataType.Should().Be(CellValues.Date);
     }
-
-    [Test]
-    public void ToCell_WithDataNull_ShouldThrowInvalidOperationException()
-    {
-        // Arrange
-        var excelCell = new ExcelCell("E", 5);
-
-        // Act
-        Action act = () => excelCell.ToCell();
-
-        // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("Not Data to convert to CellValue");
-    }
 }

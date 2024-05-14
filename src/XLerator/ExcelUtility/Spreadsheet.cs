@@ -36,7 +36,7 @@ internal class Spreadsheet : IDisposable
 
     public static Spreadsheet Create(XLeratorOptions options)
     {
-        var document = SpreadsheetDocument.Create(options.GetFilePath(), SpreadsheetDocumentType.Workbook);
+        var document = SpreadsheetDocument.Create(options.FilePath, SpreadsheetDocumentType.Workbook);
         
         var workbookPart = document.AddWorkbookPart();
         workbookPart.Workbook = new Workbook();
@@ -70,7 +70,7 @@ internal class Spreadsheet : IDisposable
 
     public static Spreadsheet Open(XLeratorOptions options, bool isEditable)
     {
-        var document = SpreadsheetDocument.Open(options.GetFilePath(), isEditable);
+        var document = SpreadsheetDocument.Open(options.FilePath, isEditable);
         var result = GetWorksheetPartByName(document, options.GetSheetNameOrDefault());
         var workbookPart = document.WorkbookPart!;
         

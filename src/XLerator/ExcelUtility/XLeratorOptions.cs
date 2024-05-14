@@ -25,15 +25,5 @@ public class XLeratorOptions
     /// </summary>
     public uint columnOffSet { get; set; } = 0;
 
-    internal string GetFilePath()
-    {
-        if (FilePath is null)
-        {
-            throw new ArgumentNullException(nameof(FilePath), "File Path is requered.");
-        }
-
-        return FilePath;
-    }
-
     internal string GetSheetNameOrDefault() => SheetName ?? "Sheet1";
 }

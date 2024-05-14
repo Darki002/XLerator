@@ -30,12 +30,6 @@ public class ExcelCreatorTest
         // Assert
         excelEditor.Should().NotBeNull();
         excelEditor.Dispose();
-        
-        // Clean Up
-        if (File.Exists(filePath))
-        {
-            File.Delete(filePath);
-        }
     }
     
     [Test]
@@ -59,14 +53,6 @@ public class ExcelCreatorTest
         // Assert
         var fileExist = File.Exists(filePath);
         fileExist.Should().BeTrue();
-        
-        // Clean Up
-        if (fileExist)
-        {
-            File.Delete(filePath);
-        }
-        fileExist = File.Exists(filePath);
-        fileExist.Should().BeFalse();
     }
 
     [Test]
@@ -119,12 +105,6 @@ public class ExcelCreatorTest
             // Assert
             firstHeaderValue.Should().Be("Index");
             secondHeaderValue.Should().Be("Name");
-        }
-        
-        // Clean Up
-        if (File.Exists(filePath))
-        {
-            File.Delete(filePath);
         }
     }
 }

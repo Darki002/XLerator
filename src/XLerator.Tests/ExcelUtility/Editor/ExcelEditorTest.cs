@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility;
 using XLerator.ExcelUtility.Editor;
+using XLerator.Tests.Mappings;
 using XLerator.Tests.TestObjects;
 
 namespace XLerator.Tests.ExcelUtility.Editor;
@@ -22,8 +23,12 @@ public class ExcelEditorTest
             SheetName = "Sheet1"
         };
         var spreadsheet = Spreadsheet.Create(options);
+
+        var mapper = new ExcelMapperBaseFake();
+        mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Id), 1);
+        mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Name), 2);
         
-        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, new ExcelMapperDummy(), options);
+        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper, options);
         
         // Act
         var data = new HeaderedExcelClass
@@ -58,12 +63,6 @@ public class ExcelEditorTest
             // Assert
             firstHeaderValue.Should().Be(data.Id.ToString());
             secondHeaderValue.Should().Be(data.Name);
-        }
-        
-        // Clean Up
-        if (File.Exists(filePath))
-        {
-            File.Delete(filePath);
         }
     }
 }

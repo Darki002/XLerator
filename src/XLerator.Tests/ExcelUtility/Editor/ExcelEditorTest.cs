@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility;
 using XLerator.ExcelUtility.Editor;
@@ -15,6 +14,8 @@ public class ExcelEditorTest
     {
         // Arrange
         const string filePath = "./Write_AddsNewRowToSpreadSheet.xlsx";
+        TestEnvironment.FilePaths.Add(filePath);
+        
         var options = new XLeratorOptions
         {
             FilePath = filePath,
@@ -64,30 +65,5 @@ public class ExcelEditorTest
         {
             File.Delete(filePath);
         }
-    }
-    
-    private static StringValue CreateFile(string filePath, string sheetName)
-    {
-        var spreadsheet = SpreadsheetDocument.Create(filePath, SpreadsheetDocumentType.Workbook);
-        
-        var workbookPart = spreadsheet.AddWorkbookPart();
-        workbookPart.Workbook = new Workbook();
-        
-        var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
-        worksheetPart.Worksheet = new Worksheet(new SheetData());
-        
-        var sheets = spreadsheet.WorkbookPart?.Workbook.AppendChild(new Sheets());
-        var sheetId = workbookPart.GetIdOfPart(worksheetPart);
-        var sheet = new Sheet
-        {
-            Id = sheetId,
-            SheetId = 1,
-            Name = sheetName
-        };
-        
-        sheets?.Append(sheet);
-        spreadsheet.Save();
-        spreadsheet.Dispose();
-        return sheetId;
     }
 }

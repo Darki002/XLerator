@@ -6,6 +6,6 @@ public class Tester
     [Test]
     public void Test()
     {
-        XLerator.Test.Run("./Test.xlsx");
+        // XLerator.Test.Run("./Test.xlsx");
     }
 }

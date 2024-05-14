@@ -40,7 +40,6 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
             }
         }
         spreadsheet.Save();
-        spreadsheet.Dispose();
 
         return ExcelEditor<T>.CreateFrom(spreadsheet, excelMapper, xLeratorOptions);
     }

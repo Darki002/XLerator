@@ -16,7 +16,7 @@ public class ExcelEditorTest
     {
         // Arrange
         const string filePath = "./Write_AddsNewRowToSpreadSheet.xlsx";
-        TestEnvironment.FilePaths.Add(filePath);
+        XLeratorTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {
@@ -70,7 +70,7 @@ public class ExcelEditorTest
     {
         // Arrange
         const string filePath = "./WriteMany_AddsNewRowsToSpreadSheet.xlsx";
-        TestEnvironment.FilePaths.Add(filePath);
+        XLeratorTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {
@@ -143,7 +143,7 @@ public class ExcelEditorTest
     {
         // Arrange
         const string filePath = "./Update_UpdatesTheRowOnSpreadSheet.xlsx";
-        TestEnvironment.FilePaths.Add(filePath);
+        XLeratorTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {

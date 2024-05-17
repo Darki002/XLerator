@@ -15,7 +15,7 @@ public class ExcelCreatorTest
     {
         // Arrange
         const string filePath = "./CreateExcel_ReturnsNewIExcelEditor.xlsx";
-        TestEnvironment.FilePaths.Add(filePath);
+        XLeratorTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {
@@ -37,7 +37,7 @@ public class ExcelCreatorTest
     {
         // Arrange
         const string filePath = "./CreateExcel_CreatesANewExcelFile.xlsx";
-        TestEnvironment.FilePaths.Add(filePath);
+        XLeratorTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {
@@ -60,7 +60,7 @@ public class ExcelCreatorTest
     {
         // Arrange
         const string filePath = "./CreateExcel_CreatesHeader_WhenSetTrue.xlsx";
-        TestEnvironment.FilePaths.Add(filePath);
+        XLeratorTest.FilePaths.Add(filePath);
         
         const string sheetName = "Sheet";
         var options = new XLeratorOptions

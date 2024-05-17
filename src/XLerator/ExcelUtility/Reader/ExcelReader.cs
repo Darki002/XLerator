@@ -20,48 +20,26 @@ internal class ExcelReader<T> : IExcelReader<T> where T : class
         return new ExcelReader<T>(spreadsheet, excelMapper);
     }
 
-    public T GetCell(int row, int column)
+    public T GetRow(int rowIndex)
     {
+        ThrowHelper.IfInvalidRowIndex(rowIndex);
+
         throw new NotImplementedException();
     }
 
-    public T GetCell(string cellReference)
+    public List<T> GetRows(int lowerBound, int upperBound)
     {
+        ThrowHelper.IfInvalidRowIndex(lowerBound);
+        ThrowHelper.IfInvalidRowIndex(upperBound);
+
         throw new NotImplementedException();
     }
 
     public List<T> GetRange(int column, int lowerRow, int upperRow)
     {
-        throw new NotImplementedException();
-    }
+        ThrowHelper.IfInvalidRowIndex(lowerRow);
+        ThrowHelper.IfInvalidRowIndex(upperRow);
 
-    public List<T> GetRange(Range rowRange, int column)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<List<T>> GetRange(int lowerRow, int lowerColumn, int upperRow, int upperColumn)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<List<T>> GetRange(Range rowRange, Range columnRange)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<T> GetRow(int row)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<List<T>> GetRows(int lowerBound, int upperBound)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<List<T>> GetRows(Range range)
-    {
         throw new NotImplementedException();
     }
     

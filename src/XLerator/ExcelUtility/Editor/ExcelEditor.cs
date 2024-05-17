@@ -48,10 +48,7 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
 
     public void Update(int rowIndex, T data)
     {
-        if (rowIndex <= 0)
-        {
-            throw new ArgumentException("Row Index must be greater then 0.");
-        }
+        ThrowHelper.IfInvalidRowIndex(rowIndex);
         
         try
         {

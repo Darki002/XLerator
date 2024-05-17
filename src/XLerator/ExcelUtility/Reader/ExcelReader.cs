@@ -20,7 +20,7 @@ internal class ExcelReader<T> : IExcelReader<T> where T : class
         return new ExcelReader<T>(spreadsheet, excelMapper);
     }
 
-    public T GetCell(uint row, uint column)
+    public T GetCell(int row, int column)
     {
         throw new NotImplementedException();
     }
@@ -30,17 +30,17 @@ internal class ExcelReader<T> : IExcelReader<T> where T : class
         throw new NotImplementedException();
     }
 
-    public List<T> GetRange(uint column, uint lowerRow, uint upperRow)
+    public List<T> GetRange(int column, int lowerRow, int upperRow)
     {
         throw new NotImplementedException();
     }
 
-    public List<T> GetRange(Range rowRange, uint column)
+    public List<T> GetRange(Range rowRange, int column)
     {
         throw new NotImplementedException();
     }
 
-    public List<List<T>> GetRange(uint lowerRow, uint lowerColumn, uint upperRow, uint upperColumn)
+    public List<List<T>> GetRange(int lowerRow, int lowerColumn, int upperRow, int upperColumn)
     {
         throw new NotImplementedException();
     }
@@ -50,12 +50,12 @@ internal class ExcelReader<T> : IExcelReader<T> where T : class
         throw new NotImplementedException();
     }
 
-    public List<T> GetRow(uint row)
+    public List<T> GetRow(int row)
     {
         throw new NotImplementedException();
     }
 
-    public List<List<T>> GetRows(uint lowerBound, uint upperBound)
+    public List<List<T>> GetRows(int lowerBound, int upperBound)
     {
         throw new NotImplementedException();
     }

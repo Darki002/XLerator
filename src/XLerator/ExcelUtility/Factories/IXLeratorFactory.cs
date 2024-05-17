@@ -8,7 +8,7 @@ namespace XLerator.ExcelUtility.Factories;
 /// Factory that can create different Instances of the Excel Utilities.
 /// </summary>
 /// <typeparam name="T">The type of data and structure of the spreadsheet </typeparam>
-public interface IXLeratorFactory<in T> where T : class
+public interface IXLeratorFactory<T> where T : class
 {
     /// <summary>
     /// Creates new Instance of an <see cref="IExcelCreator{T}"/>

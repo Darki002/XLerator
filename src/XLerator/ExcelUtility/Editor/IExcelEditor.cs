@@ -23,8 +23,12 @@ public interface IExcelEditor<in T> : IDisposable where T : class
     /// </summary>
     /// <param name="data">The data for the new rows</param>
     void WriteMany(IEnumerable<T> data);
-    
-    // TODO: Provide functions to edit more precise
-    // - Edit one cell
-    // - Edit an existing row / overwrite / add row where you want
+
+    /// <summary>
+    /// Updates the content of a row in the spreadsheet.
+    /// </summary>
+    /// <param name="rowIndex">The index of the row to update.</param>
+    /// <param name="data">The data for the rows</param>
+    /// <exception cref="ArgumentException">When rowIndex is less or equal to 0.</exception>
+    void Update(int rowIndex, T data);
 }

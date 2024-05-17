@@ -30,7 +30,8 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
     {
         try
         {
-            var row = CreateNewRow(data);
+            var rowIndex = GetNewRowIndex();
+            var row = ExcelData<T>.CreateFrom(data, rowIndex, excelMapper);
             AddRow(row);
             spreadsheet.Save();
         }
@@ -42,18 +43,20 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
     }
 
     public void WriteMany(params T[] data) => WriteRows(data);
-    
+
     public void WriteMany(IEnumerable<T> data) => WriteRows(data);
 
-    internal void WriteRows(IEnumerable<T> data)
+    public void Update(int rowIndex, T data)
     {
+        if (rowIndex <= 0)
+        {
+            throw new ArgumentException("Row Index must be greater then 0.");
+        }
+        
         try
         {
-            foreach (var rowData in data)
-            {
-                var row = CreateNewRow(rowData);
-                AddRow(row);
-            }
+            var row = ExcelData<T>.CreateFrom(data, (uint)rowIndex, excelMapper);
+            AddRow(row);
             spreadsheet.Save();
         }
         catch
@@ -63,11 +66,23 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         }
     }
 
-    private ExcelData<T> CreateNewRow(T data)
+    internal void WriteRows(IEnumerable<T> data)
     {
-        var lastRow = spreadsheet.LastRowOrDefault();
-        var index = lastRow?.RowIndex ?? 0u;
-        return ExcelData<T>.CreateFrom(data, index + 1, excelMapper);
+        try
+        {
+            foreach (var rowData in data)
+            {
+                var rowIndex = GetNewRowIndex();
+                var row = ExcelData<T>.CreateFrom(rowData, rowIndex, excelMapper);
+                AddRow(row);
+            }
+            spreadsheet.Save();
+        }
+        catch
+        {
+            spreadsheet.Save();
+            throw;
+        }
     }
 
     private void AddRow(ExcelData<T> row)
@@ -82,6 +97,13 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
             lastCell = newCell;
         }
         spreadsheet.AppendRow(dataRow);
+    }
+
+    private uint GetNewRowIndex()
+    {
+        var lastRow = spreadsheet.LastRowOrDefault();
+        var oldIndex = lastRow?.RowIndex ?? 0u;
+        return oldIndex + 1;
     }
     
     public void Dispose()

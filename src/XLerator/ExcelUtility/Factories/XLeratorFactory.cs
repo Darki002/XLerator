@@ -6,13 +6,6 @@
 /// <typeparam name="T">The type of data and structure of the spreadsheet </typeparam>
 public partial class XLeratorFactory<T> : IXLeratorFactory<T> where T : class
 {
-    private readonly XLeratorOptions options;
-    
-    private XLeratorFactory(XLeratorOptions options)
-    {
-        this.options = options;
-    }
-
     /// <summary>
     /// Creates a new Instance of a <see cref="IXLeratorFactory{T}"/>.
     /// </summary>

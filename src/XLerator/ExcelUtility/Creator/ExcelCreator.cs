@@ -1,10 +1,27 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility.Editor;
+using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Creator;
 
-internal partial class ExcelCreator<T> : IExcelCreator<T> where T : class
+internal class ExcelCreator<T> : IExcelCreator<T> where T : class
 {
+    private const uint RowIndex = 1;
+    
+    private readonly ExcelMapperBase excelMapper;
+    private readonly XLeratorOptions xLeratorOptions;
+    
+    private ExcelCreator(XLeratorOptions xLeratorOptions, ExcelMapperBase excelMapper)
+    {
+        this.excelMapper = excelMapper;
+        this.xLeratorOptions = xLeratorOptions;
+    }
+
+    internal static IExcelCreator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
+    {
+       return new ExcelCreator<T>(options, excelMapper);
+    }
+    
     public IExcelEditor<T> CreateExcel(bool addHeader)
     {
        var spreadsheet = Spreadsheet.Create(xLeratorOptions);

@@ -6,7 +6,11 @@
 /// <typeparam name="T">The type of data and structure of the spreadsheet.</typeparam>
 public interface IExcelIterator<out T> : IDisposable
 {
+    // TODO docs
+    
     bool Read();
 
     T GetCurrentRow();
+
+    void SkipRows(int amount);
 }

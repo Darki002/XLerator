@@ -9,6 +9,8 @@ namespace XLerator.ExcelUtility.Factories;
 
 public partial class XLeratorFactory<T>
 {
+    // TODO Iterator factory
+    
     public IExcelCreator<T> CreateExcelCreator()
     {
         var mapper = CreateMapper(typeof(T));

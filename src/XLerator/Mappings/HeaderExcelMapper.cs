@@ -21,7 +21,7 @@ internal class HeaderExcelMapper : ExcelMapperBase
         var index = 1;
         foreach (var property in propertyInfos)
         {
-            var headerAttribute = property.GetCustomAttribute<ExcelHeaderName>();
+            var headerAttribute = property.GetCustomAttribute<HeaderName>();
             var name = headerAttribute?.Name ?? property.Name;
             
             mapper.HeaderMap.Add(property.Name, name);

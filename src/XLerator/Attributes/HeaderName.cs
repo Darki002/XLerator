@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="name">The Text for the Header</param>
 [AttributeUsage(AttributeTargets.Property)]
-public class ExcelHeaderName(string name) : Attribute
+public class HeaderName(string name) : Attribute
 {
     public string Name { get; } = name;
 }

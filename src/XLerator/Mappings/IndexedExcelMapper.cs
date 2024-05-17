@@ -22,11 +22,11 @@ internal class IndexedExcelMapper : ExcelMapperBase
         var propertyInfos = type.GetProperties();
         foreach (var property in propertyInfos)
         {
-            var attribute = property.GetCustomAttribute<ExcelIndex>();
+            var attribute = property.GetCustomAttribute<ColumnIndex>();
             if (attribute is null) continue;
             mapper.PropertyIndexMap.Add(property.Name, attribute.Index);
             
-            var headerAttribute = property.GetCustomAttribute<ExcelHeaderName>();
+            var headerAttribute = property.GetCustomAttribute<HeaderName>();
             if(headerAttribute is null) continue;
             mapper.HeaderMap.Add(property.Name, headerAttribute.Name);
         }

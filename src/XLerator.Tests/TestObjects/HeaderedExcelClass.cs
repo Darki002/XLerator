@@ -5,7 +5,7 @@ namespace XLerator.Tests.TestObjects;
 [NoExcelIndexes]
 public class HeaderedExcelClass
 {
-    [ExcelHeaderName("Index")]
+    [HeaderName("Index")]
     public int Id { get; init; } = 0;
 
     public string Name { get; init; } = "Test";

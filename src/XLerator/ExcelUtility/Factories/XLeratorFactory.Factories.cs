@@ -29,11 +29,11 @@ public partial class XLeratorFactory<T>
     
     internal static ExcelMapperBase CreateMapper(Type type)
     {
-        if (type.IsDefined(typeof(IndexedExcel)))
+        if (type.IsDefined(typeof(NoExcelIndexes)))
         {
-            return IndexedExcelMapper.CreateFrom(type);
+            return HeaderExcelMapper.CreateFrom(type);
         }
         
-        return HeaderExcelMapper.CreateFrom(type);
+        return IndexedExcelMapper.CreateFrom(type);
     }
 }

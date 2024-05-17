@@ -29,7 +29,7 @@ public class ExcelEditorTest
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Id), 1);
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Name), 2);
         
-        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper);
+        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper, options);
         
         // Act
         var data = new HeaderedExcelClass
@@ -83,7 +83,7 @@ public class ExcelEditorTest
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Id), 1);
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Name), 2);
         
-        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper);
+        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper, options);
         
         // Act
         var data = new HeaderedExcelClass
@@ -170,7 +170,7 @@ public class ExcelEditorTest
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Id), 1);
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Name), 2);
         
-        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper);
+        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper, options);
         
         // Act
         testee.Update(2, update);

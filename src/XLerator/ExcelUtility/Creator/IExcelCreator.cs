@@ -11,7 +11,6 @@ public interface IExcelCreator<in T> where T : class
     /// <summary>
     /// Creates a new Excel file and returns a new Instance of a <see cref="IExcelEditor{T}"/>.
     /// </summary>
-    /// <param name="addHeader">If True adds a header line on creation.</param>
     /// <returns>The new Instance of a <see cref="IExcelEditor{T}"/>.</returns>
-    IExcelEditor<T> CreateExcel(bool addHeader);
+    IExcelEditor<T> CreateExcel();
 }

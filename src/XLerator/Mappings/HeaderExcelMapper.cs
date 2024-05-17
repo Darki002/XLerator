@@ -32,9 +32,4 @@ internal class HeaderExcelMapper : ExcelMapperBase
         
         return mapper;
     }
-
-    internal static HeaderExcelMapper CreateFromExistingExcel(Type type, string filePath)
-    {
-        throw new NotImplementedException();
-    }
 }

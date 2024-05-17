@@ -13,7 +13,7 @@ public interface IExcelReader<T> : IDisposable where T : class
     /// </summary>
     /// <param name="rowIndex">The index of the row</param>
     /// <returns>Returns a new Instance of <typeparamref name="T" />, representing the row in the spreadsheet.</returns>
-    /// <exception cref="ArgumentException">When <paramref name="rowIndex" /> is less or equal to zero.</exception>
+    /// <exception cref="ArgumentException">When <paramref name="rowIndex" /> is less then zero.</exception>
     T GetRow(int rowIndex);
 
     /// <summary>
@@ -24,8 +24,8 @@ public interface IExcelReader<T> : IDisposable where T : class
     /// <param name="upperBound">The index of the row after the last row to read (not included in the result).</param>
     /// <returns>A list of new instances of <typeparamref name="T" />, representing the rows in the specified range.</returns>
     /// <exception cref="ArgumentException">
-    ///     When <paramref name="lowerBound" /> or <paramref name="upperBound" /> is less or
-    ///     equal to zero. -or- when <paramref name="upperBound" /> is less than <paramref name="lowerBound" />
+    ///     When <paramref name="lowerBound" /> or <paramref name="upperBound" /> is less then zero.
+    ///     -or- when <paramref name="upperBound" /> is less than <paramref name="lowerBound" />
     /// </exception>
     List<T> GetRows(int lowerBound, int upperBound);
 }

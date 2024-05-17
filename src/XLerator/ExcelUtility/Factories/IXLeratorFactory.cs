@@ -25,6 +25,7 @@ public interface IXLeratorFactory<T> where T : class
     /// <summary>
     /// Creates new Instance of an <see cref="IExcelEditor{T}"/>
     /// </summary>
+    /// <param name="headerLength">How many rows are considered as a header and have to be ignored. Default is Zero</param>
     /// <returns>A new Instance of a ExcelEditor</returns>
     IExcelEditor<T> CreateExcelEditor();
 }

@@ -6,24 +6,27 @@ namespace XLerator.ExcelUtility.Editor;
 internal class ExcelEditor<T> : IExcelEditor<T> where T : class
 {
     private readonly ExcelMapperBase excelMapper;
+
+    private readonly XLeratorOptions options;
     
     private Spreadsheet spreadsheet;
     
-    private ExcelEditor(Spreadsheet spreadsheet, ExcelMapperBase excelMapper)
+    private ExcelEditor(Spreadsheet spreadsheet, ExcelMapperBase excelMapper, XLeratorOptions options)
     {
         this.excelMapper = excelMapper;
+        this.options = options;
         this.spreadsheet = spreadsheet;
     }
 
     internal static ExcelEditor<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
     {
         var spreadsheet = Spreadsheet.Open(options, true);
-        return new ExcelEditor<T>(spreadsheet, excelMapper);
+        return new ExcelEditor<T>(spreadsheet, excelMapper, options);
     }
     
-    internal static ExcelEditor<T> CreateFrom(Spreadsheet spreadsheet, ExcelMapperBase excelMapper)
+    internal static ExcelEditor<T> CreateFrom(Spreadsheet spreadsheet, ExcelMapperBase excelMapper, XLeratorOptions options)
     {
-        return new ExcelEditor<T>(spreadsheet, excelMapper);
+        return new ExcelEditor<T>(spreadsheet, excelMapper, options);
     }
     
     public void Write(T data)
@@ -49,7 +52,7 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
     public void Update(int rowIndex, T data)
     {
         ThrowHelper.IfInvalidRowIndex(rowIndex);
-        
+        rowIndex += options.HeaderLength;
         try
         {
             var row = ExcelData<T>.CreateFrom(data, (uint)rowIndex, excelMapper);

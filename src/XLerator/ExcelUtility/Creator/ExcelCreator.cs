@@ -6,15 +6,13 @@ namespace XLerator.ExcelUtility.Creator;
 
 internal class ExcelCreator<T> : IExcelCreator<T> where T : class
 {
-    private const uint RowIndex = 1;
-    
     private readonly ExcelMapperBase excelMapper;
-    private readonly XLeratorOptions xLeratorOptions;
+    private readonly XLeratorOptions options;
     
-    private ExcelCreator(XLeratorOptions xLeratorOptions, ExcelMapperBase excelMapper)
+    private ExcelCreator(XLeratorOptions options, ExcelMapperBase excelMapper)
     {
         this.excelMapper = excelMapper;
-        this.xLeratorOptions = xLeratorOptions;
+        this.options = options;
     }
 
     internal static IExcelCreator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
@@ -22,15 +20,16 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
        return new ExcelCreator<T>(options, excelMapper);
     }
     
-    public IExcelEditor<T> CreateExcel(bool addHeader)
+    public IExcelEditor<T> CreateExcel()
     {
-       var spreadsheet = Spreadsheet.Create(xLeratorOptions);
+       var spreadsheet = Spreadsheet.Create(options);
         
-        if (addHeader)
+        if (options.HeaderLength > 0)
         {
             try
             {
-                AddHeader(spreadsheet);
+                var index = (uint)options.HeaderLength;
+                AddHeader(spreadsheet, index);
             }
             catch
             {
@@ -41,13 +40,13 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
         }
         spreadsheet.Save();
 
-        return ExcelEditor<T>.CreateFrom(spreadsheet, excelMapper);
+        return ExcelEditor<T>.CreateFrom(spreadsheet, excelMapper, options);
     }
     
-    private void AddHeader(Spreadsheet spreadsheet)
+    private void AddHeader(Spreadsheet spreadsheet, uint index)
     {
-       var row = ExcelHeader<T>.CreateFrom(RowIndex, excelMapper);
-       var dataRow = new Row { RowIndex = RowIndex };
+       var row = ExcelHeader<T>.CreateFrom(index, excelMapper);
+       var dataRow = new Row { RowIndex = index };
         
        Cell? lastCell = null;
        foreach (var cell in row)

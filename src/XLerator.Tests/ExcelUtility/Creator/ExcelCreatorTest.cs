@@ -25,7 +25,7 @@ public class ExcelCreatorTest
         var testee = ExcelCreator<Dummy>.Create(options, new ExcelMapperDummy());
         
         // Act
-        var excelEditor = testee.CreateExcel(false);
+        var excelEditor = testee.CreateExcel();
         
         // Assert
         excelEditor.Should().NotBeNull();
@@ -47,7 +47,7 @@ public class ExcelCreatorTest
         var testee = ExcelCreator<Dummy>.Create(options, new ExcelMapperDummy());
         
         // Act
-        var editor = testee.CreateExcel(false);
+        var editor = testee.CreateExcel();
         editor.Dispose();
         
         // Assert
@@ -66,7 +66,8 @@ public class ExcelCreatorTest
         var options = new XLeratorOptions
         {
             FilePath = filePath,
-            SheetName = sheetName
+            SheetName = sheetName,
+            HeaderLength = 2
         };
 
         var excelMapper = new ExcelMapperBaseFake();
@@ -78,33 +79,32 @@ public class ExcelCreatorTest
         var testee = ExcelCreator<HeaderedExcelClass>.Create(options, excelMapper);
         
         // Act
-        var excelEditor = testee.CreateExcel(true);
+        var excelEditor = testee.CreateExcel();
         excelEditor.Dispose();
         
         // Assert
-        using (var spreadsheetDocument = SpreadsheetDocument.Open(filePath, false))
-        {
-            var workbookPart = spreadsheetDocument.WorkbookPart;
-            var worksheetPart = workbookPart?.WorksheetParts.First();
-            var sheetData = worksheetPart?.Worksheet.Elements<SheetData>().First();
-            var rows = sheetData?.Elements<Row>().ToList();
+        using var spreadsheetDocument = SpreadsheetDocument.Open(filePath, false);
+        var workbookPart = spreadsheetDocument.WorkbookPart;
+        var worksheetPart = workbookPart?.WorksheetParts.First();
+        var sheetData = worksheetPart?.Worksheet.Elements<SheetData>().First();
+        var rows = sheetData?.Elements<Row>().ToList();
 
-            // Assert
-            rows.Should().NotBeNull();
-            rows!.Count.Should().Be(1);
+        // Assert
+        rows.Should().NotBeNull();
+        rows!.Count.Should().Be(1);
 
-            var headerRow = rows.First();
-            var cells = headerRow.Elements<Cell>().ToList();
+        var headerRow = rows.First();
+        headerRow.RowIndex.Should().Be(2u);
+        var cells = headerRow.Elements<Cell>().ToList();
             
-            // Assert
-            cells.Count.Should().Be(2);
+        // Assert
+        cells.Count.Should().Be(2);
 
-            var firstHeaderValue = cells[0].InnerText;
-            var secondHeaderValue = cells[1].InnerText;
+        var firstHeaderValue = cells[0].InnerText;
+        var secondHeaderValue = cells[1].InnerText;
 
-            // Assert
-            firstHeaderValue.Should().Be("Index");
-            secondHeaderValue.Should().Be("Name");
-        }
+        // Assert
+        firstHeaderValue.Should().Be("Index");
+        secondHeaderValue.Should().Be("Name");
     }
 }

@@ -18,13 +18,14 @@ public class Tester
         var options = new XLeratorOptions()
         {
             FilePath = "./Test-file.xlsx",
-            SheetName = "Testy"
+            SheetName = "Testy",
+            HeaderLength = 1
         };
         
         var factory = XLeratorFactory<HeaderedExcelClass>.CreateFactory(options);
         var creator = factory.CreateExcelCreator();
 
-        using var editor = creator.CreateExcel(true);
+        using var editor = creator.CreateExcel();
 
         var data = new HeaderedExcelClass
         {

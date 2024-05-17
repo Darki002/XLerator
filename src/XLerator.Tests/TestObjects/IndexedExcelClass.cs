@@ -2,7 +2,6 @@
 
 namespace XLerator.Tests.TestObjects;
 
-[IndexedExcel]
 public class IndexedExcelClass
 {
     [ExcelIndex(1)] 

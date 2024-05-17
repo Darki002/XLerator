@@ -6,32 +6,20 @@ namespace XLerator.ExcelUtility;
 
 internal class Spreadsheet : IDisposable
 {
-    public SpreadsheetDocument Document { get; private set; }
+    private SpreadsheetDocument document;
 
-    public WorkbookPart WorkbookPart { get; private set; }
-
-    public WorksheetPart WorksheetPart { get; private set; }
+    private WorksheetPart worksheetPart;
     
     public SheetData SheetData { get; private set; }
-    
-    public Sheets Sheets { get; private set; }
-
-    public Sheet Sheet { get; private set; }
 
     private Spreadsheet(
         SpreadsheetDocument document, 
-        WorkbookPart workbookPart, 
         WorksheetPart worksheetPart, 
-        SheetData sheetData,
-        Sheets sheets, 
-        Sheet sheet)
+        SheetData sheetData)
     {
-        Document = document;
-        WorkbookPart = workbookPart;
-        WorksheetPart = worksheetPart;
+        this.document = document;
+        this.worksheetPart = worksheetPart;
         SheetData = sheetData;
-        Sheets = sheets;
-        Sheet = sheet;
     }
 
     public static Spreadsheet Create(XLeratorOptions options)
@@ -53,18 +41,17 @@ internal class Spreadsheet : IDisposable
             Name = options.GetSheetNameOrDefault()
         };
         
-        var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>()!;
-        
         sheets.Append(sheet);
         document.Save();
+        document.Dispose();
+        
+        document = SpreadsheetDocument.Open(options.FilePath, true);
+        var result = GetWorksheetPartByName(document, options.GetSheetNameOrDefault());
         
         var spreadsheet = new Spreadsheet(
             document: document,
-            workbookPart: workbookPart,
-            worksheetPart: worksheetPart,
-            sheetData: sheetData,
-            sheets: sheets,
-            sheet: sheet);
+            worksheetPart: result.worksheetPart,
+            sheetData: result.sheetData);
         return spreadsheet;
     }
 
@@ -72,19 +59,15 @@ internal class Spreadsheet : IDisposable
     {
         var document = SpreadsheetDocument.Open(options.FilePath, isEditable);
         var result = GetWorksheetPartByName(document, options.GetSheetNameOrDefault());
-        var workbookPart = document.WorkbookPart!;
         
             var spreadsheet = new Spreadsheet(
             document: document,
-            workbookPart: workbookPart,
             worksheetPart: result.worksheetPart,
-            sheetData: result.sheetData,
-            sheets: result.sheets,
-            sheet: result.sheet);
+            sheetData: result.sheetData);
         return spreadsheet;
     }
     
-    private static (WorksheetPart worksheetPart, Sheets sheets, Sheet sheet, SheetData sheetData) GetWorksheetPartByName(SpreadsheetDocument document, string sheetName)
+    private static (WorksheetPart worksheetPart, SheetData sheetData) GetWorksheetPartByName(SpreadsheetDocument document, string sheetName)
     {
         var sheets = document.WorkbookPart?.Workbook.Sheets!;
         foreach (var sheet in sheets.Elements<Sheet>())
@@ -95,7 +78,7 @@ internal class Spreadsheet : IDisposable
             }
             var worksheetPart = (WorksheetPart)document.WorkbookPart?.GetPartById(sheet.Id!)!;
             var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>()!;
-            return (worksheetPart, sheets, sheet, sheetData);
+            return (worksheetPart, sheetData);
         }
 
         throw new InvalidOperationException("The SheetData was not initialized correctly.");
@@ -116,24 +99,20 @@ internal class Spreadsheet : IDisposable
 
     public void Save()
     {
-        WorksheetPart.Worksheet.Save();
-        Document.Save();
+        worksheetPart.Worksheet.Save();
+        document.Save();
     }
 
     public void SaveWorksheet()
     {
-        WorksheetPart.Worksheet.Save();
+        worksheetPart.Worksheet.Save();
     }
 
     public void Dispose()
     {
-        Save();
-        Document.Dispose();
-        Document = null!;
-        WorkbookPart = null!;
-        WorksheetPart = null!;
+        document.Dispose();
+        document = null!;
+        worksheetPart = null!;
         SheetData = null!;
-        Sheets = null!;
-        Sheet = null!;
     }
 }

@@ -4,7 +4,7 @@ using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Reader;
 
-internal class ExcelReader<T> : IExcelReader<T> where T : class
+internal partial class ExcelReader<T> : IExcelReader<T> where T : class
 {
     private readonly ExcelMapperBase excelMapper;
     
@@ -30,32 +30,19 @@ internal class ExcelReader<T> : IExcelReader<T> where T : class
             .SingleOrDefault(r => r.RowIndex != null && r.RowIndex == rowIndex);
 
         ThrowHelper.ThrowIfNull(row, $"Row with index {rowIndex} does not exist.");
-
-        var instanceType = typeof(T);
         
         var cells = row!.Elements<Cell>().ToList();
+        
+        var instanceType = typeof(T);
         var properties = instanceType.GetProperties();
-
         var instance = (T)Activator.CreateInstance(instanceType)!;
 
         foreach (var propertyInfo in properties)
         {
-            var cellIndex = excelMapper.GetColumnIndexFor(propertyInfo.Name);
-            ThrowHelper.ThrowIfNull(cellIndex, $"Excel file does not Match expected pattern of Type {typeof(T)}");
-            var valueString = cells[(int)cellIndex! - 1].CellValue?.InnerText;
-            
             var type = propertyInfo.PropertyType;
-
-            if (valueString is null)
-            {
-                propertyInfo.SetValue(instance, Helper.GetDefaultValue(type));
-                continue;
-            }
-
-            var converter = TypeDescriptor.GetConverter(type);
-            var value = converter.ConvertFromString(valueString);
+            var valueString = GetCellValue(cells, propertyInfo.Name);
             
-            propertyInfo.SetValue(instance, value);
+            propertyInfo.SetValue(instance, GetValueOrDefault(type, valueString));
         }
 
         return instance;
@@ -71,7 +58,15 @@ internal class ExcelReader<T> : IExcelReader<T> where T : class
         ThrowHelper.IfInvalidRowIndex(lowerBound);
         ThrowHelper.IfInvalidRowIndex(upperBound);
 
-        throw new NotImplementedException();
+        if (lowerBound > upperBound)
+        {
+            throw new ArgumentException($"{nameof(lowerBound)} must be greater or equal then {nameof(upperBound)}");
+        }
+
+        return spreadsheet.SheetData.Elements<Row>()
+            .Where(r => r.RowIndex != null && r.RowIndex >= lowerBound && r.RowIndex <= upperBound)
+            .Select(row => GetRow((int)row.RowIndex?.Value!))
+            .ToList();
     }
     
     public void Dispose()

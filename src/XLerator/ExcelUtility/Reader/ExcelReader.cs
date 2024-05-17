@@ -1,4 +1,5 @@
-﻿using XLerator.Mappings;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Reader;
 
@@ -24,7 +25,15 @@ internal class ExcelReader<T> : IExcelReader<T> where T : class
     {
         ThrowHelper.IfInvalidRowIndex(rowIndex);
 
-        throw new NotImplementedException();
+        var row = spreadsheet.SheetData.Elements<Row>()
+            .SingleOrDefault(r => r.RowIndex != null && r.RowIndex == rowIndex);
+
+        if (row is null)
+        {
+            throw new ArgumentException($"Row with index {rowIndex} does not exist.");
+        }
+        
+        var cells = row.Elements<Cell>().ToList();
     }
 
     public List<T> GetRows(int lowerBound, int upperBound)

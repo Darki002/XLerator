@@ -4,7 +4,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace XLerator.ExcelUtility;
 
-internal struct ExcelCell(string column, uint row, object data)
+internal readonly struct ExcelCell(string column, uint row, object data)
 {
     private object Data { get; } = data;
     

@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility;
 using XLerator.ExcelUtility.Editor;
@@ -135,5 +136,56 @@ public class ExcelEditorTest
         // Assert
         firstHeaderValue.Should().Be(data2.Id.ToString());
         secondHeaderValue.Should().Be(data2.Name);
+    }
+    
+    [Test]
+    public void Update_UpdatesTheRowOnSpreadSheet()
+    {
+        // Arrange
+        const string filePath = "./WriteMany_AddsNewRowsToSpreadSheet.xlsx";
+        TestEnvironment.FilePaths.Add(filePath);
+        
+        var options = new XLeratorOptions
+        {
+            FilePath = filePath,
+            SheetName = "Sheet1"
+        };
+        var spreadsheet = Spreadsheet.Create(options);
+        
+        var update = new HeaderedExcelClass
+        {
+            Id = 69,
+            Name = "Test"
+        };
+        
+        var row = new Row
+        {
+            RowIndex = 2
+        };
+        row.Append(new Cell { CellReference = "A2", CellValue = new CellValue(42), DataType = new EnumValue<CellValues>(CellValues.Number)});
+        spreadsheet.AppendRow(row);
+        spreadsheet.Save();
+
+        var mapper = new ExcelMapperBaseFake();
+        mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Id), 1);
+        mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Name), 2);
+        
+        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper);
+        
+        // Act
+        testee.Update(2, update);
+        testee.Dispose();
+        
+        // Assert
+        using var spreadsheetDocument = SpreadsheetDocument.Open(filePath, false);
+        var workbookPart = spreadsheetDocument.WorkbookPart;
+        var worksheetPart = workbookPart?.WorksheetParts.First();
+        var sheetData = worksheetPart?.Worksheet.Elements<SheetData>().First();
+        var rows = sheetData?.Elements<Row>().ToList();
+            
+        // Assert
+        rows.Should().NotBeNull();
+         
+        //TODO Assert update
     }
 }

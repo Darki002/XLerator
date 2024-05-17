@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.Reader;
@@ -48,11 +47,6 @@ internal partial class ExcelReader<T> : IExcelReader<T> where T : class
         return instance;
     }
 
-    public T GetRowOrDefault(int rowIndex)
-    {
-        throw new NotImplementedException();
-    }
-
     public List<T> GetRows(int lowerBound, int upperBound)
     {
         ThrowHelper.IfInvalidRowIndex(lowerBound);
@@ -64,7 +58,7 @@ internal partial class ExcelReader<T> : IExcelReader<T> where T : class
         }
 
         return spreadsheet.SheetData.Elements<Row>()
-            .Where(r => r.RowIndex != null && r.RowIndex >= lowerBound && r.RowIndex <= upperBound)
+            .Where(r => r.RowIndex != null && r.RowIndex >= lowerBound && r.RowIndex < upperBound)
             .Select(row => GetRow((int)row.RowIndex?.Value!))
             .ToList();
     }

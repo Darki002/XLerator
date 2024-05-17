@@ -142,7 +142,7 @@ public class ExcelEditorTest
     public void Update_UpdatesTheRowOnSpreadSheet()
     {
         // Arrange
-        const string filePath = "./WriteMany_AddsNewRowsToSpreadSheet.xlsx";
+        const string filePath = "./Update_UpdatesTheRowOnSpreadSheet.xlsx";
         TestEnvironment.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
@@ -187,5 +187,12 @@ public class ExcelEditorTest
         rows.Should().NotBeNull();
          
         //TODO Assert update
+        var actual = rows?.Single(r => r.RowIndex == row.RowIndex);
+        var cells = actual?.Elements<Cell>().ToList();
+
+        cells.Should().NotBeNull();
+        cells.Should().HaveCount(2);
+        cells![0].InnerText.Should().Be(update.Id.ToString());
+        cells[1].InnerText.Should().Be(update.Name);
     }
 }

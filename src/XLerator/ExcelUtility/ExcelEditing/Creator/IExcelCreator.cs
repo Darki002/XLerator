@@ -1,6 +1,6 @@
-﻿using XLerator.ExcelUtility.Editor;
+﻿using XLerator.ExcelUtility.ExcelEditing.Editor;
 
-namespace XLerator.ExcelUtility.Creator;
+namespace XLerator.ExcelUtility.ExcelEditing.Creator;
 
 /// <summary>
 /// Creates a new spreadsheet. It will be structure based on <typeparamref name="T"/>.

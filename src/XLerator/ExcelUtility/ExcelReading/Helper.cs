@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel;
 using DocumentFormat.OpenXml.Spreadsheet;
+using XLerator.Mappings;
 
-namespace XLerator.ExcelUtility.Reader;
+namespace XLerator.ExcelUtility.ExcelReading;
 
-internal partial class ExcelReader<T>
+internal static class Helper
 {
     internal static object? GetDefaultValue(Type type)
     {
@@ -11,7 +12,7 @@ internal partial class ExcelReader<T>
         return type.IsValueType ? Activator.CreateInstance(type) : null;
     }
 
-    internal string? GetCellValue(IReadOnlyList<Cell> cells, string propertyName)
+    internal static string? GetCellValue<T>(IReadOnlyList<Cell> cells, ExcelMapperBase excelMapper, string propertyName)
     {
         var cellIndex = excelMapper.GetColumnIndexFor(propertyName);
         ThrowHelper.ThrowIfNull(cellIndex, $"Excel file does not Match expected pattern of Type {typeof(T)}");

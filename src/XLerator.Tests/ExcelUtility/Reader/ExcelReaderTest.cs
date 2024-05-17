@@ -1,6 +1,6 @@
 ﻿using XLerator.ExcelUtility;
-using XLerator.ExcelUtility.Creator;
-using XLerator.ExcelUtility.Reader;
+using XLerator.ExcelUtility.ExcelEditing.Creator;
+using XLerator.ExcelUtility.ExcelReading.Reader;
 using XLerator.Mappings;
 using XLerator.Tests.TestObjects;
 

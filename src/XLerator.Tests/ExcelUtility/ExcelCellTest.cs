@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility;
+using XLerator.ExcelUtility.ExcelEditing;
 
 namespace XLerator.Tests.ExcelUtility;
 

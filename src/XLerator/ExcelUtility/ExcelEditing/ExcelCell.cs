@@ -2,7 +2,7 @@
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
 
-namespace XLerator.ExcelUtility;
+namespace XLerator.ExcelUtility.ExcelEditing;
 
 internal readonly struct ExcelCell(string column, uint row, object data)
 {

@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.Mappings;
 
-namespace XLerator.ExcelUtility.Editor;
+namespace XLerator.ExcelUtility.ExcelEditing.Editor;
 
 internal class ExcelEditor<T> : IExcelEditor<T> where T : class
 {

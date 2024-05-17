@@ -1,6 +1,6 @@
 ﻿using XLerator.Mappings;
 
-namespace XLerator.ExcelUtility;
+namespace XLerator.ExcelUtility.ExcelEditing;
 
 internal class ExcelData<T> : ExcelRow where T : class
 {

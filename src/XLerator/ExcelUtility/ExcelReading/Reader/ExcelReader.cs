@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.Mappings;
 
-namespace XLerator.ExcelUtility.Reader;
+namespace XLerator.ExcelUtility.ExcelReading.Reader;
 
 internal partial class ExcelReader<T> : IExcelReader<T> where T : class
 {
@@ -43,9 +43,9 @@ internal partial class ExcelReader<T> : IExcelReader<T> where T : class
         foreach (var propertyInfo in properties)
         {
             var type = propertyInfo.PropertyType;
-            var valueString = GetCellValue(cells, propertyInfo.Name);
+            var valueString = Helper.GetCellValue<T>(cells, excelMapper, propertyInfo.Name);
 
-            propertyInfo.SetValue(instance, GetValueOrDefault(type, valueString));
+            propertyInfo.SetValue(instance, Helper.GetValueOrDefault(type, valueString));
         }
 
         return instance;

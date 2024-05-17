@@ -1,6 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
-using XLerator.ExcelUtility;
-using XLerator.ExcelUtility.Reader;
+using XLerator.ExcelUtility.ExcelReading;
 using XLerator.Tests.Mappings;
 
 namespace XLerator.Tests.ExcelUtility.Reader;
@@ -18,7 +17,7 @@ public class ExcelReaderHelperTest
             var type = typeof(int?);
         
             // Act
-            var actual = ExcelReader<Dummy>.GetDefaultValue(type);
+            var actual = Helper.GetDefaultValue(type);
         
             // Assert
             actual.Should().BeNull();
@@ -31,7 +30,7 @@ public class ExcelReaderHelperTest
             var type = typeof(int);
         
             // Act
-            var actual = ExcelReader<Dummy>.GetDefaultValue(type);
+            var actual = Helper.GetDefaultValue(type);
         
             // Assert
             actual.Should().Be(0);
@@ -44,7 +43,7 @@ public class ExcelReaderHelperTest
             var type = typeof(string);
         
             // Act
-            var actual = ExcelReader<Dummy>.GetDefaultValue(type);
+            var actual = Helper.GetDefaultValue(type);
         
             // Assert
             actual.Should().Be(string.Empty);
@@ -57,7 +56,7 @@ public class ExcelReaderHelperTest
             var type = typeof(DateTime);
         
             // Act
-            var actual = ExcelReader<Dummy>.GetDefaultValue(type);
+            var actual = Helper.GetDefaultValue(type);
         
             // Assert
             actual.Should().Be(DateTime.MinValue);
@@ -70,19 +69,8 @@ public class ExcelReaderHelperTest
         [Test]
         public void GetCellValue_ThrowsArgumentException_WhenNoCellIndexIsFound()
         {
-            // Arrange
-            var options = new XLeratorOptions
-            {
-                FilePath = "./GetCellValue_ThrowsArgumentException_WhenNoCellIndexIsFound.xlsx"
-            };
-
-            using (var _ = Spreadsheet.Create(options)) { }
-            XLeratorTest.FilePaths.Add(options.FilePath);
-            
-            var testee = ExcelReader<Dummy>.Create(options, new ExcelMapperDummy());
-            
-            // Act
-            var actual = () => testee.GetCellValue(new List<Cell>(), "Test");
+          // Act
+            var actual = () => Helper.GetCellValue<string>(new List<Cell>(), new ExcelMapperDummy(), "Test");
             
             // Asset
             actual.Should().Throw<ArgumentException>();
@@ -91,20 +79,9 @@ public class ExcelReaderHelperTest
         [Test]
         public void GetCellValue_ReturnsCorrectCell()
         {
-            // Arrange
-            var options = new XLeratorOptions
-            {
-                FilePath = "./GetCellValue_ReturnsCorrectCell.xlsx"
-            };
-
-            using (var _ = Spreadsheet.Create(options)) { }
-            XLeratorTest.FilePaths.Add(options.FilePath);
-
             var mapper = new ExcelMapperBaseFake();
             mapper.AddPropertyIndexMap("Test", 2);
             
-            var testee = ExcelReader<Dummy>.Create(options, mapper);
-
             var cell = new Cell
             {
                 CellValue = new CellValue("Test")
@@ -117,7 +94,7 @@ public class ExcelReaderHelperTest
             };
             
             // Act
-            var actual = testee.GetCellValue(cells, "Test");
+            var actual = Helper.GetCellValue<string>(cells, mapper, "Test");
             
             // Asset
             actual.Should().Be("Test");
@@ -131,7 +108,7 @@ public class ExcelReaderHelperTest
         public void GetValueOrDefault_ReturnsDefaultValue_WhenStringIsNull()
         {
             // Act
-            var actual = ExcelReader<Dummy>.GetValueOrDefault(typeof(int), null);
+            var actual = Helper.GetValueOrDefault(typeof(int), null);
             
             // Asset
             actual.Should().Be(0);
@@ -141,7 +118,7 @@ public class ExcelReaderHelperTest
         public void GetValueOrDefault_ReturnsValueFromString()
         {
             // Act
-            var actual = ExcelReader<Dummy>.GetValueOrDefault(typeof(int), "69");
+            var actual = Helper.GetValueOrDefault(typeof(int), "69");
             
             // Asset
             actual.Should().BeOfType<int>();

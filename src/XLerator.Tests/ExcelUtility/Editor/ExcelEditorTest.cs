@@ -2,7 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility;
-using XLerator.ExcelUtility.Editor;
+using XLerator.ExcelUtility.ExcelEditing.Editor;
 using XLerator.Tests.Mappings;
 using XLerator.Tests.TestObjects;
 

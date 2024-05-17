@@ -1,8 +1,8 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
-using XLerator.ExcelUtility.Editor;
+using XLerator.ExcelUtility.ExcelEditing.Editor;
 using XLerator.Mappings;
 
-namespace XLerator.ExcelUtility.Creator;
+namespace XLerator.ExcelUtility.ExcelEditing.Creator;
 
 internal class ExcelCreator<T> : IExcelCreator<T> where T : class
 {

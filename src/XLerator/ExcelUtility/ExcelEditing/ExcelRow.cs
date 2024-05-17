@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace XLerator.ExcelUtility;
+namespace XLerator.ExcelUtility.ExcelEditing;
 
 internal abstract class ExcelRow : IEnumerable<ExcelCell>
 {

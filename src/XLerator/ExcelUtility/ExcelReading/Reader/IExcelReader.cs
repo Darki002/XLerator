@@ -1,4 +1,4 @@
-﻿namespace XLerator.ExcelUtility.Reader;
+﻿namespace XLerator.ExcelUtility.ExcelReading.Reader;
 
 /// <summary>
 ///     Reads rows in the spreadsheet as the given type.

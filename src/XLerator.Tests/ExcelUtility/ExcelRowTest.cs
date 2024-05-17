@@ -1,4 +1,5 @@
 ﻿using XLerator.ExcelUtility;
+using XLerator.ExcelUtility.ExcelEditing;
 using XLerator.Tests.Mappings;
 using XLerator.Tests.TestObjects;
 

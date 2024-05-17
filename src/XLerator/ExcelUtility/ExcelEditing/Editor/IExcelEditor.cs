@@ -1,4 +1,4 @@
-﻿namespace XLerator.ExcelUtility.Editor;
+﻿namespace XLerator.ExcelUtility.ExcelEditing.Editor;
 
 /// <summary>
 /// Allows to edit the Excel file.

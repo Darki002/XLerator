@@ -9,4 +9,12 @@ internal static class ThrowHelper
             throw new ArgumentException("Row Index must be greater then 0.");
         }
     }
+
+    public static void ThrowIfNull(object? obj, string message)
+    {
+        if (obj is null)
+        {
+            throw new ArgumentException(message);
+        }
+    }
 }

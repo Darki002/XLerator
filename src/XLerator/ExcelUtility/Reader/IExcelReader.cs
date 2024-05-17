@@ -6,9 +6,12 @@
 /// <typeparam name="T">The type of data and structure of the spreadsheet</typeparam>
 public interface IExcelReader<T> : IDisposable where T : class
 {
+    // TODO Add Exceptions to docs
+    
     T GetRow(int rowIndex);
+    
+    // TODO Naming...
+    T GetRowOrDefault(int rowIndex);
 
     List<T> GetRows(int lowerBound, int upperBound);
-    
-    List<T> GetRange(int column, int lowerRow, int upperRow);
 }

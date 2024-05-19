@@ -35,6 +35,7 @@ internal class ExcelIterator<T> : IExcelIterator<T>
     
     public bool Read()
     {
+        // TODO skip over rows that aren't present in the spreadsheet.
         currentRowIndex++;
         return currentRowIndex < maxRowIndex;
     }
@@ -73,7 +74,9 @@ internal class ExcelIterator<T> : IExcelIterator<T>
 
         currentRowIndex += (uint)amount;
         
-        var exists = spreadsheet.SheetData.Elements<Row>().Any(r => r.RowIndex?.Value == currentRowIndex);
+        
+        // TODO: possible that the row doesn't exist but there are more rows in the spreadsheet. 
+        var exists = spreadsheet.SheetData.Elements<Row>().Any(r => r.RowIndex?.Value >= currentRowIndex);
         if (!exists)
         {
             throw new ArgumentException($"Row with the index {currentRowIndex} doesn't exist in the spreadsheet.");

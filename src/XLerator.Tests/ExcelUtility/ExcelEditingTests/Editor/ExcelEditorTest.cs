@@ -6,7 +6,7 @@ using XLerator.ExcelUtility.ExcelEditing.Editor;
 using XLerator.Tests.Mappings;
 using XLerator.Tests.TestObjects;
 
-namespace XLerator.Tests.ExcelUtility.Editor;
+namespace XLerator.Tests.ExcelUtility.ExcelEditingTests.Editor;
 
 [TestFixture]
 public class ExcelEditorTest

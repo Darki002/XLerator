@@ -47,7 +47,7 @@ internal class ExcelIterator<T> : IExcelIterator<T>
         }
 
         var row = spreadsheet.SheetData.Elements<Row>().Single(r => r.RowIndex?.Value == currentRowIndex);
-        var cells = row!.Elements<Cell>().ToList();
+        var cells = row.Elements<Cell>().ToList();
 
         var instanceType = typeof(T);
         var properties = instanceType.GetProperties();

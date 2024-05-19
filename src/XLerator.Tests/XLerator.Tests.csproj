@@ -22,4 +22,9 @@
       <ProjectReference Include="..\XLerator\XLerator.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ExcelUtility\ExcelEditingTests\" />
+      <Folder Include="ExcelUtility\ExcelReadingTest\Iterator\" />
+    </ItemGroup>
+
 </Project>

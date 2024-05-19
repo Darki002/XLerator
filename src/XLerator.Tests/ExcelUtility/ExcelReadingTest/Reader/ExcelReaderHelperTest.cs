@@ -2,7 +2,7 @@
 using XLerator.ExcelUtility.ExcelReading;
 using XLerator.Tests.Mappings;
 
-namespace XLerator.Tests.ExcelUtility.Reader;
+namespace XLerator.Tests.ExcelUtility.ExcelReadingTest.Reader;
 
 [TestFixture]
 public class ExcelReaderHelperTest

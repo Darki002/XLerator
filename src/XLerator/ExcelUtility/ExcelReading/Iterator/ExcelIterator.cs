@@ -9,22 +9,20 @@ internal class ExcelIterator<T> : IExcelIterator<T>
 {
     private readonly ExcelMapperBase excelMapper;
 
+    private readonly XLeratorOptions options;
+
     private Spreadsheet spreadsheet;
 
-    private uint currentRowIndex;
+    private Row? currentRow;
 
-    private readonly uint maxRowIndex;
+    private uint currentRowIndex;
 
     private ExcelIterator(Spreadsheet spreadsheet, ExcelMapperBase excelMapper, XLeratorOptions options)
     {
         this.excelMapper = excelMapper;
+        this.options = options;
         this.spreadsheet = spreadsheet;
-        currentRowIndex = (uint)options.HeaderLength;
-        
-        maxRowIndex = this.spreadsheet.SheetData.Elements<Row>()
-            .Where(r => r.RowIndex != null)
-            .MaxBy(r => (uint)r.RowIndex!)?
-            .RowIndex?.Value ?? (uint)options.HeaderLength;
+        currentRow = null;
     }
 
     internal static ExcelIterator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
@@ -35,20 +33,21 @@ internal class ExcelIterator<T> : IExcelIterator<T>
     
     public bool Read()
     {
-        // TODO skip over rows that aren't present in the spreadsheet.
-        currentRowIndex++;
-        return currentRowIndex < maxRowIndex;
+        currentRow = spreadsheet.SheetData.Elements<Row>()
+            .Where(r => r.RowIndex?.Value > options.HeaderLength)
+            .Where(r => r.RowIndex > currentRow?.RowIndex)
+            .MinBy(r => r.RowIndex?.Value);
+        return currentRow is null;
     }
 
     public T GetCurrentRow()
     {
-        if (currentRowIndex > maxRowIndex)
+        if (currentRow is null)
         {
-            throw new InvalidOperationException("No more rows left to read in the spreadsheet.");
+            throw new InvalidOperationException("No row was found to read.");
         }
 
-        var row = spreadsheet.SheetData.Elements<Row>().Single(r => r.RowIndex?.Value == currentRowIndex);
-        var cells = row.Elements<Cell>().ToList();
+        var cells = currentRow.Elements<Cell>().ToList();
 
         var instanceType = typeof(T);
         var properties = instanceType.GetProperties();
@@ -71,16 +70,9 @@ internal class ExcelIterator<T> : IExcelIterator<T>
         {
             throw new ArgumentException($"{nameof(amount)} must be greater then zero.");
         }
-
-        currentRowIndex += (uint)amount;
         
-        
-        // TODO: possible that the row doesn't exist but there are more rows in the spreadsheet. 
-        var exists = spreadsheet.SheetData.Elements<Row>().Any(r => r.RowIndex?.Value >= currentRowIndex);
-        if (!exists)
-        {
-            throw new ArgumentException($"Row with the index {currentRowIndex} doesn't exist in the spreadsheet.");
-        }
+        currentRow = spreadsheet.SheetData.Elements<Row>()
+            .SingleOrDefault(r => r.RowIndex == currentRow?.RowIndex);
     }
 
     public void Dispose()

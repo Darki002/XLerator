@@ -6,6 +6,23 @@ namespace XLerator.ExcelUtility.ExcelReading;
 
 internal static class Helper
 {
+    public static T DeserializerFrom<T>(List<Cell> cells, ExcelMapperBase excelMapper)
+    {
+        var instanceType = typeof(T);
+        var properties = instanceType.GetProperties();
+        var instance = (T)Activator.CreateInstance(instanceType)!;
+
+        foreach (var propertyInfo in properties)
+        {
+            var type = propertyInfo.PropertyType;
+            var valueString = GetCellValue<T>(cells, excelMapper, propertyInfo.Name);
+
+            propertyInfo.SetValue(instance, GetValueOrDefault(type, valueString));
+        }
+
+        return instance;
+    }
+    
     internal static object? GetDefaultValue(Type type)
     {
         if (type == typeof(string)) return string.Empty;

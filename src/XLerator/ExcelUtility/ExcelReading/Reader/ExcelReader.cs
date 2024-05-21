@@ -3,7 +3,7 @@ using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.ExcelReading.Reader;
 
-internal partial class ExcelReader<T> : IExcelReader<T> where T : class
+internal class ExcelReader<T> : IExcelReader<T> where T : class
 {
     private readonly ExcelMapperBase excelMapper;
 
@@ -35,20 +35,7 @@ internal partial class ExcelReader<T> : IExcelReader<T> where T : class
         ThrowHelper.ThrowIfNull(row, $"Row with index {rowIndex} does not exist.");
 
         var cells = row!.Elements<Cell>().ToList();
-
-        var instanceType = typeof(T);
-        var properties = instanceType.GetProperties();
-        var instance = (T)Activator.CreateInstance(instanceType)!;
-
-        foreach (var propertyInfo in properties)
-        {
-            var type = propertyInfo.PropertyType;
-            var valueString = Helper.GetCellValue<T>(cells, excelMapper, propertyInfo.Name);
-
-            propertyInfo.SetValue(instance, Helper.GetValueOrDefault(type, valueString));
-        }
-
-        return instance;
+        return Helper.DeserializerFrom<T>(cells, excelMapper);
     }
 
     public List<T> GetRows(int lowerBound, int upperBound)

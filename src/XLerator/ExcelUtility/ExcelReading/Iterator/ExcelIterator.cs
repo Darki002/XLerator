@@ -23,6 +23,7 @@ internal class ExcelIterator<T> : IExcelIterator<T>
         this.options = options;
         this.spreadsheet = spreadsheet;
         currentRow = null;
+        currentRowIndex = 0;
     }
 
     internal static ExcelIterator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
@@ -37,31 +38,20 @@ internal class ExcelIterator<T> : IExcelIterator<T>
             .Where(r => r.RowIndex?.Value > options.HeaderLength)
             .Where(r => r.RowIndex > currentRow?.RowIndex)
             .MinBy(r => r.RowIndex?.Value);
-        return currentRow is null;
+        currentRowIndex = currentRow?.RowIndex?.Value ?? 0;
+        
+        return spreadsheet.SheetData.Elements<Row>().Any(r => r.RowIndex?.Value > currentRowIndex);
     }
 
     public T GetCurrentRow()
     {
         if (currentRow is null)
         {
-            throw new InvalidOperationException("No row was found to read.");
+            throw new InvalidOperationException($"No row was found to read at index {currentRowIndex}.");
         }
 
         var cells = currentRow.Elements<Cell>().ToList();
-
-        var instanceType = typeof(T);
-        var properties = instanceType.GetProperties();
-        var instance = (T)Activator.CreateInstance(instanceType)!;
-
-        foreach (var propertyInfo in properties)
-        {
-            var type = propertyInfo.PropertyType;
-            var valueString = Helper.GetCellValue<T>(cells, excelMapper, propertyInfo.Name);
-
-            propertyInfo.SetValue(instance, Helper.GetValueOrDefault(type, valueString));
-        }
-
-        return instance;
+        return Helper.DeserializerFrom<T>(cells, excelMapper);
     }
 
     public void SkipRows(int amount)
@@ -70,9 +60,11 @@ internal class ExcelIterator<T> : IExcelIterator<T>
         {
             throw new ArgumentException($"{nameof(amount)} must be greater then zero.");
         }
-        
+
         currentRow = spreadsheet.SheetData.Elements<Row>()
-            .SingleOrDefault(r => r.RowIndex == currentRow?.RowIndex);
+            .Where(r => r.RowIndex > currentRow?.RowIndex)
+            .MinBy(r => r.RowIndex);
+        currentRowIndex = currentRow?.RowIndex?.Value ?? 0;
     }
 
     public void Dispose()

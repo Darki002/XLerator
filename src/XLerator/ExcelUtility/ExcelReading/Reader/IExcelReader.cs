@@ -6,8 +6,6 @@
 /// <typeparam name="T">The type of row in the spreadsheet.</typeparam>
 public interface IExcelReader<T> : IDisposable where T : class
 {
-    // TODO Add Exceptions to docs
-
     /// <summary>
     ///     Reads the row on the given Index.
     /// </summary>

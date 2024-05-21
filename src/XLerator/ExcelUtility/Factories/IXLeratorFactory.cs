@@ -1,5 +1,6 @@
 ﻿using XLerator.ExcelUtility.ExcelEditing.Creator;
 using XLerator.ExcelUtility.ExcelEditing.Editor;
+using XLerator.ExcelUtility.ExcelReading.Iterator;
 using XLerator.ExcelUtility.ExcelReading.Reader;
 
 namespace XLerator.ExcelUtility.Factories;
@@ -25,7 +26,12 @@ public interface IXLeratorFactory<T> where T : class
     /// <summary>
     /// Creates new Instance of an <see cref="IExcelEditor{T}"/>
     /// </summary>
-    /// <param name="headerLength">How many rows are considered as a header and have to be ignored. Default is Zero</param>
     /// <returns>A new Instance of a ExcelEditor</returns>
     IExcelEditor<T> CreateExcelEditor();
+
+    /// <summary>
+    /// Create new Instance of an <see cref="IExcelIterator{T}"/>
+    /// </summary>
+    /// <returns>A new Instance of a ExcelIterator</returns>
+    IExcelIterator<T> CreateIterator();
 }

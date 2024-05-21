@@ -20,6 +20,7 @@ public class XLeratorOptions
     /// </summary>
     public int HeaderLength { get; set; } = 0;
 
+    /*
     /// <summary>
     /// The off set for where the first row is located in the Sheet.
     /// </summary>
@@ -29,6 +30,7 @@ public class XLeratorOptions
     /// The off set for where the first column is located in the Sheet.
     /// </summary>
     public uint ColumnOffSet { get; set; } = 0;
+    */
 
     internal string GetSheetNameOrDefault() => SheetName ?? "Sheet1";
 }

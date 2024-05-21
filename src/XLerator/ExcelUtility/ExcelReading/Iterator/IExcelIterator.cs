@@ -6,8 +6,6 @@
 /// <typeparam name="T">The type of data and structure of the spreadsheet.</typeparam>
 public interface IExcelIterator<out T> : IDisposable
 {
-    // TODO docs
-    
     /// <summary>
     /// Progresses the Iterator to the next row in the spreadsheet.
     /// </summary>

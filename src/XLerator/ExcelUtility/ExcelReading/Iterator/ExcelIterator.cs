@@ -36,7 +36,7 @@ internal class ExcelIterator<T> : IExcelIterator<T>
     {
         currentRow = spreadsheet.SheetData.Elements<Row>()
             .Where(r => r.RowIndex?.Value > options.HeaderLength)
-            .Where(r => r.RowIndex > currentRow?.RowIndex)
+            .Where(r => r.RowIndex > (currentRow?.RowIndex ?? 0))
             .MinBy(r => r.RowIndex?.Value);
         currentRowIndex = currentRow?.RowIndex?.Value ?? 0;
         
@@ -62,7 +62,7 @@ internal class ExcelIterator<T> : IExcelIterator<T>
         }
 
         currentRow = spreadsheet.SheetData.Elements<Row>()
-            .Where(r => r.RowIndex > currentRow?.RowIndex)
+            .Where(r => r.RowIndex > (currentRow?.RowIndex ?? 0))
             .MinBy(r => r.RowIndex);
         currentRowIndex = currentRow?.RowIndex?.Value ?? 0;
     }

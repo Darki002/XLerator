@@ -38,7 +38,7 @@ internal class Spreadsheet : IDisposable
         {
             Id = sheetId,
             SheetId = 1,
-            Name = options.GetSheetNameOrDefault()
+            Name = options.SheetName
         };
         
         sheets.Append(sheet);
@@ -46,7 +46,7 @@ internal class Spreadsheet : IDisposable
         document.Dispose();
         
         document = SpreadsheetDocument.Open(options.FilePath, true);
-        var result = GetWorksheetPartByName(document, options.GetSheetNameOrDefault());
+        var result = GetWorksheetPartByName(document, options.SheetName);
         
         var spreadsheet = new Spreadsheet(
             document: document,
@@ -58,7 +58,7 @@ internal class Spreadsheet : IDisposable
     public static Spreadsheet Open(XLeratorOptions options, bool isEditable)
     {
         var document = SpreadsheetDocument.Open(options.FilePath, isEditable);
-        var result = GetWorksheetPartByName(document, options.GetSheetNameOrDefault());
+        var result = GetWorksheetPartByName(document, options.SheetName);
         
             var spreadsheet = new Spreadsheet(
             document: document,

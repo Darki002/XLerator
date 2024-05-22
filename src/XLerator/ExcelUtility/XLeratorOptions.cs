@@ -13,7 +13,7 @@ public class XLeratorOptions
     /// <summary>
     /// The name for the Sheet which will be read or created.
     /// </summary>
-    public string? SheetName { get; set; } = null;
+    public string SheetName { get; set; } = "Sheet1";
     
     /// <summary>
     /// How many rows are considered as a header and have to be ignored. Default is Zero
@@ -31,6 +31,4 @@ public class XLeratorOptions
     /// </summary>
     public uint ColumnOffSet { get; set; } = 0;
     */
-
-    internal string GetSheetNameOrDefault() => SheetName ?? "Sheet1";
 }

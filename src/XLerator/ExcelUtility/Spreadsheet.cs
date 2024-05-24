@@ -44,13 +44,14 @@ internal class Spreadsheet : IDisposable
             Name = options.SheetName
         };
         
+        var sharedStringTable = GetSharedStringTable(workbookPart);
+        
         sheets.Append(sheet);
         document.Save();
         document.Dispose();
         
         document = SpreadsheetDocument.Open(options.FilePath, true);
         var result = GetWorksheetPartByName(document, options.SheetName);
-        var sharedStringTable = GetSharedStringTable(workbookPart);
         
         var spreadsheet = new Spreadsheet(
             document: document,
@@ -64,7 +65,10 @@ internal class Spreadsheet : IDisposable
     {
         var document = SpreadsheetDocument.Open(options.FilePath, isEditable);
         var result = GetWorksheetPartByName(document, options.SheetName);
-        var sharedStringTable = GetSharedStringTable(document.WorkbookPart!);
+
+        var sharedStringTable = isEditable 
+            ? GetSharedStringTable(document.WorkbookPart!) 
+            : document.WorkbookPart!.GetPartsOfType<SharedStringTablePart>().First().SharedStringTable;
         
             var spreadsheet = new Spreadsheet(
             document: document,

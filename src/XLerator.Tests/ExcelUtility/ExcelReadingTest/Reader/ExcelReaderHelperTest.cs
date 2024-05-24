@@ -91,7 +91,7 @@ public class ExcelReaderHelperTest
         public void GetCellValue_ReturnsCorrectCell()
         {
             // Arrange
-            const string filePath = "./GetCellValue_ThrowsArgumentException_WhenNoCellIndexIsFound";
+            const string filePath = "./GetCellValue_ReturnsCorrectCell";
             var spreadsheet = Spreadsheet.Create(
                 new XLeratorOptions
                 {

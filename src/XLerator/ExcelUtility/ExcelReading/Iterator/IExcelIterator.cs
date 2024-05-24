@@ -4,7 +4,7 @@
 /// Allows to read the data in the Excel file in iteratable steps.
 /// </summary>
 /// <typeparam name="T">The type of data and structure of the spreadsheet.</typeparam>
-public interface IExcelIterator<out T> : IDisposable
+public interface IExcelIterator<out T> : IDisposable where T : class
 {
     /// <summary>
     /// Progresses the Iterator to the next row in the spreadsheet.

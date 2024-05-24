@@ -5,7 +5,7 @@ namespace XLerator.ExcelUtility.ExcelReading.Iterator;
 
 // TODO Tests
 
-internal class ExcelIterator<T> : IExcelIterator<T>
+internal class ExcelIterator<T> : IExcelIterator<T> where T : class
 {
     private readonly ExcelMapperBase excelMapper;
 
@@ -50,7 +50,8 @@ internal class ExcelIterator<T> : IExcelIterator<T>
         }
 
         var cells = currentRow.Elements<Cell>().ToList();
-        return Helper.DeserializerFrom<T>(cells, excelMapper);
+        var helper = new Helper<T>(spreadsheet, excelMapper);
+        return helper.DeserializerFrom(cells);
     }
 
     public void SkipRows(int amount)

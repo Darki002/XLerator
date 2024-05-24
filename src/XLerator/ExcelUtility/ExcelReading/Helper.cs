@@ -4,9 +4,10 @@ using XLerator.Mappings;
 
 namespace XLerator.ExcelUtility.ExcelReading;
 
-internal static class Helper
+internal class Helper<T>(Spreadsheet spreadsheet, ExcelMapperBase excelMapper)
+    where T : class
 {
-    public static T DeserializerFrom<T>(List<Cell> cells, ExcelMapperBase excelMapper)
+    public T DeserializerFrom(List<Cell> cells)
     {
         var instanceType = typeof(T);
         var properties = instanceType.GetProperties();
@@ -15,7 +16,7 @@ internal static class Helper
         foreach (var propertyInfo in properties)
         {
             var type = propertyInfo.PropertyType;
-            var valueString = GetCellValue<T>(cells, excelMapper, propertyInfo.Name);
+            var valueString = GetCellValue(cells, propertyInfo.Name);
 
             propertyInfo.SetValue(instance, GetValueOrDefault(type, valueString));
         }
@@ -29,7 +30,7 @@ internal static class Helper
         return type.IsValueType ? Activator.CreateInstance(type) : null;
     }
 
-    internal static string? GetCellValue<T>(IReadOnlyList<Cell> cells, ExcelMapperBase excelMapper, string propertyName)
+    internal string GetCellValue(IReadOnlyList<Cell> cells, string propertyName)
     {
         var cellIndex = excelMapper.GetColumnIndexFor(propertyName);
         ThrowHelper.ThrowIfNull(cellIndex, $"Excel file does not Match expected pattern of Type {typeof(T)}");
@@ -37,7 +38,7 @@ internal static class Helper
 
         if (cell.DataType != null && cell.DataType == CellValues.SharedString)
         {
-            // TODO: load shared string
+            return spreadsheet.GetSharedString(cell);
         }
         
         return cell.InnerText;

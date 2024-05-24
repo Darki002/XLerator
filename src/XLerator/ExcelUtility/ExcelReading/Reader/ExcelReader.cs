@@ -35,7 +35,8 @@ internal class ExcelReader<T> : IExcelReader<T> where T : class
         ThrowHelper.ThrowIfNull(row, $"Row with index {rowIndex} does not exist.");
 
         var cells = row!.Elements<Cell>().ToList();
-        return Helper.DeserializerFrom<T>(cells, excelMapper);
+        var helper = new Helper<T>(spreadsheet, excelMapper);
+        return helper.DeserializerFrom(cells);
     }
 
     public List<T> GetRows(int lowerBound, int upperBound)

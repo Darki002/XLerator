@@ -50,7 +50,7 @@ internal class Spreadsheet : IDisposable
         
         document = SpreadsheetDocument.Open(options.FilePath, true);
         var result = GetWorksheetPartByName(document, options.SheetName);
-        var sharedStringTable = GetSharedStringTable(result.worksheetPart);
+        var sharedStringTable = GetSharedStringTable(workbookPart);
         
         var spreadsheet = new Spreadsheet(
             document: document,
@@ -64,7 +64,7 @@ internal class Spreadsheet : IDisposable
     {
         var document = SpreadsheetDocument.Open(options.FilePath, isEditable);
         var result = GetWorksheetPartByName(document, options.SheetName);
-        var sharedStringTable = GetSharedStringTable(result.worksheetPart);
+        var sharedStringTable = GetSharedStringTable(document.WorkbookPart!);
         
             var spreadsheet = new Spreadsheet(
             document: document,
@@ -91,11 +91,14 @@ internal class Spreadsheet : IDisposable
         throw new InvalidOperationException("The SheetData was not initialized correctly.");
     }
 
-    private static SharedStringTable GetSharedStringTable(WorksheetPart worksheetPart)
+    private static SharedStringTable GetSharedStringTable(WorkbookPart workbookPart)
     {
-        var sharedStringParts = worksheetPart.GetPartsOfType<SharedStringTablePart>().ToList();
-        var shareStringPart = sharedStringParts.FirstOrDefault() ?? worksheetPart.AddNewPart<SharedStringTablePart>();
-        return shareStringPart.SharedStringTable;
+        var sharedStringPart = workbookPart.GetPartsOfType<SharedStringTablePart>().FirstOrDefault();
+        if (sharedStringPart != null) return sharedStringPart.SharedStringTable;
+        
+        sharedStringPart = workbookPart.AddNewPart<SharedStringTablePart>();
+        sharedStringPart.SharedStringTable = new SharedStringTable();
+        return sharedStringPart.SharedStringTable;
     }
     
     public Row? LastRowOrDefault() => SheetData.Elements<Row>().LastOrDefault();
@@ -151,5 +154,6 @@ internal class Spreadsheet : IDisposable
         document = null!;
         worksheetPart = null!;
         SheetData = null!;
+        sharedStringTable = null!;
     }
 }

@@ -46,7 +46,7 @@ public class IteratorTest
         var expected = new IndexedExcelClass
         {
             Id = 1,
-            Name = "Test2"
+            Name = "Test"
         };
         
         var iterator = CreateIterator();

@@ -9,17 +9,20 @@ internal class Spreadsheet : IDisposable
     private SpreadsheetDocument document;
 
     private WorksheetPart worksheetPart;
+
+    private SharedStringTable sharedStringTable;
     
     public SheetData SheetData { get; private set; }
 
     private Spreadsheet(
         SpreadsheetDocument document, 
         WorksheetPart worksheetPart, 
-        SheetData sheetData)
+        SheetData sheetData, SharedStringTable sharedStringTable)
     {
         this.document = document;
         this.worksheetPart = worksheetPart;
         SheetData = sheetData;
+        this.sharedStringTable = sharedStringTable;
     }
 
     public static Spreadsheet Create(XLeratorOptions options)
@@ -47,11 +50,13 @@ internal class Spreadsheet : IDisposable
         
         document = SpreadsheetDocument.Open(options.FilePath, true);
         var result = GetWorksheetPartByName(document, options.SheetName);
+        var sharedStringTable = GetSharedStringTable(result.worksheetPart);
         
         var spreadsheet = new Spreadsheet(
             document: document,
             worksheetPart: result.worksheetPart,
-            sheetData: result.sheetData);
+            sheetData: result.sheetData,
+            sharedStringTable: sharedStringTable);
         return spreadsheet;
     }
 
@@ -59,11 +64,13 @@ internal class Spreadsheet : IDisposable
     {
         var document = SpreadsheetDocument.Open(options.FilePath, isEditable);
         var result = GetWorksheetPartByName(document, options.SheetName);
+        var sharedStringTable = GetSharedStringTable(result.worksheetPart);
         
             var spreadsheet = new Spreadsheet(
             document: document,
             worksheetPart: result.worksheetPart,
-            sheetData: result.sheetData);
+            sheetData: result.sheetData,
+            sharedStringTable: sharedStringTable);
         return spreadsheet;
     }
     
@@ -83,6 +90,13 @@ internal class Spreadsheet : IDisposable
 
         throw new InvalidOperationException("The SheetData was not initialized correctly.");
     }
+
+    private static SharedStringTable GetSharedStringTable(WorksheetPart worksheetPart)
+    {
+        var sharedStringParts = worksheetPart.GetPartsOfType<SharedStringTablePart>().ToList();
+        var shareStringPart = sharedStringParts.FirstOrDefault() ?? worksheetPart.AddNewPart<SharedStringTablePart>();
+        return shareStringPart.SharedStringTable;
+    }
     
     public Row? LastRowOrDefault() => SheetData.Elements<Row>().LastOrDefault();
 
@@ -95,6 +109,29 @@ internal class Spreadsheet : IDisposable
         }
         
         SheetData.Append(row);
+    }
+
+    public string GetSharedString(Cell cell)
+    {
+        var ssid = int.Parse(cell.InnerText);
+        var ssi = sharedStringTable.Elements<SharedStringItem>().ElementAt(ssid);
+        return ssi.Text != null ? ssi.Text.Text : ssi.InnerText;
+    }
+
+    public int AddSharedString(string str)
+    {
+        var items = sharedStringTable.Elements<SharedStringItem>().ToList();
+        for (var i = 0; i < items.Count; i++)
+        {
+            if (items[i].InnerText == str)
+            {
+                return i;
+            }
+        }
+        
+        sharedStringTable.AppendChild(new SharedStringItem(new Text(str)));
+        sharedStringTable.Save();
+        return items.Count + 1;
     }
 
     public void Save()

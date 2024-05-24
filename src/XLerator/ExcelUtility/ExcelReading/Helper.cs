@@ -33,7 +33,14 @@ internal static class Helper
     {
         var cellIndex = excelMapper.GetColumnIndexFor(propertyName);
         ThrowHelper.ThrowIfNull(cellIndex, $"Excel file does not Match expected pattern of Type {typeof(T)}");
-        return cells[(int)cellIndex! - 1].CellValue?.InnerText;
+        var cell = cells[(int)cellIndex! - 1];
+
+        if (cell.DataType != null && cell.DataType == CellValues.SharedString)
+        {
+            // TODO: load shared string
+        }
+        
+        return cell.InnerText;
     }
 
     internal static object? GetValueOrDefault(Type type, string? valueString)

@@ -19,18 +19,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\XLerator\XLerator.csproj" />
+        <ProjectReference Include="..\XLerator\XLerator.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ExcelUtility\ExcelEditingTests\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="ExcelUtility\ExcelReadingTest\Iterator\test.xlsx" />
-      <AdditionalFiles Include="ExcelUtility\ExcelReadingTest\Iterator\test.xlsx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </AdditionalFiles>
+        <Folder Include="ExcelUtility\ExcelEditingTests\" />
+        <None Update="ExcelUtility\ExcelReadingTest\Iterator\test.xlsx">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

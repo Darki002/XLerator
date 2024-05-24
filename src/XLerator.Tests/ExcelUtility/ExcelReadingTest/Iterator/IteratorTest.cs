@@ -6,6 +6,7 @@ using XLerator.Tests.TestObjects;
 namespace XLerator.Tests.ExcelUtility.ExcelReadingTest.Iterator;
 
 [TestFixture]
+[NonParallelizable]
 public class IteratorTest
 {
     [Test]
@@ -95,7 +96,7 @@ public class IteratorTest
     {
         var options = new XLeratorOptions
         {
-            FilePath = "./test.xlsx",
+            FilePath = "./ExcelUtility/ExcelReadingTest/Iterator/test.xlsx",
         };
 
         var mapper = IndexedExcelMapper.CreateFrom(typeof(IndexedExcelClass));

@@ -39,7 +39,6 @@ internal class ExcelIterator<T> : IExcelIterator<T>
             .Where(r => r.RowIndex > (currentRow?.RowIndex ?? 0))
             .MinBy(r => r.RowIndex?.Value);
         currentRowIndex = currentRow?.RowIndex?.Value ?? 0;
-        
         return spreadsheet.SheetData.Elements<Row>().Any(r => r.RowIndex?.Value > currentRowIndex);
     }
 

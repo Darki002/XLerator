@@ -22,16 +22,16 @@ public partial class XLeratorFactory<T>
         return ExcelEditor<T>.Create(options, mapper);
     }
     
-    public IExcelReader<T> CreateReader() 
-    {
-        var mapper = CreateMapper(typeof(T));
-        return ExcelReader<T>.Create(options, mapper);
-    }
-
-    public IExcelIterator<T> CreateIterator()
+    public IExcelIterator<T> CreateExcelIterator()
     {
         var mapper = CreateMapper(typeof(T));
         return ExcelIterator<T>.Create(options, mapper);
+    }
+    
+    public IExcelReader<T> CreateExcelReader() 
+    {
+        var mapper = CreateMapper(typeof(T));
+        return ExcelReader<T>.Create(options, mapper);
     }
     
     internal static ExcelMapperBase CreateMapper(Type type)

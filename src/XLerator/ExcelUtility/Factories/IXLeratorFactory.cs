@@ -21,7 +21,7 @@ public interface IXLeratorFactory<T> where T : class
     /// Creates new Instance of an <see cref="IExcelReader{T}"/>
     /// </summary>
     /// <returns>A new Instance of a ExcelReader</returns>
-    IExcelReader<T> CreateReader();
+    IExcelReader<T> CreateExcelReader();
 
     /// <summary>
     /// Creates new Instance of an <see cref="IExcelEditor{T}"/>
@@ -33,5 +33,5 @@ public interface IXLeratorFactory<T> where T : class
     /// Create new Instance of an <see cref="IExcelIterator{T}"/>
     /// </summary>
     /// <returns>A new Instance of a ExcelIterator</returns>
-    IExcelIterator<T> CreateIterator();
+    IExcelIterator<T> CreateExcelIterator();
 }

@@ -16,23 +16,21 @@ var options = new XLeratorOptions
 }
 var factory = XLeratorFactory<YourClass>.CreateFactory(options);
 ```
+The Generic Type is the class that you want to Serialize or Deserialize.
 
-### Creator
-
-### Editor
-
-### Iterator
-
-### Reader
+- `CreateExcelCreator`: returns a new `IExcelCreator`
+- `CreateExcelEditor`: returns a new `IExcelEditor`
+- `CreateExcelIterator`: returns a new `IExcelIterator`
+- `CreateExcelReader`: returns a new `IExcelReader`
 
 ## Excel Utilities
 
 The following functionalities are possible to use. Also see [Factory](#factory).
 
-- [Creator](./creater.md): used to create a new Spreadsheet.
-- [Editor](./editor.md): used to edit an existing Spreadsheet.
-- [Iterator](./iterator.md): used to iterator over the Spreadsheet.
-- [Reader](./reader.md): used to read a Spreadsheet.
+- [IExcelCreator](./creater.md): used to create a new Spreadsheet.
+- [IExcelEditor](./editor.md): used to edit an existing Spreadsheet.
+- [IExcelIterator](./iterator.md): used to iterator over the Spreadsheet.
+- [IExcelReader](./reader.md): used to read a Spreadsheet.
 
 ## Plans for the future
 

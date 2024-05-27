@@ -3,7 +3,7 @@
 /// <summary>
 ///     Reads rows in the spreadsheet as the given type.
 /// </summary>
-/// <typeparam name="T">The type of row in the spreadsheet.</typeparam>
+/// <typeparam name="T">The type to Serialize or Deserialize.</typeparam>
 public interface IExcelReader<T> : IDisposable where T : class
 {
     /// <summary>

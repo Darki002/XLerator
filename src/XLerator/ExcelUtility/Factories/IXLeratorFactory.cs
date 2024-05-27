@@ -8,7 +8,7 @@ namespace XLerator.ExcelUtility.Factories;
 /// <summary>
 /// Factory that can create different Instances of the Excel Utilities.
 /// </summary>
-/// <typeparam name="T">The type of data and structure of the spreadsheet </typeparam>
+/// <typeparam name="T">The type to Serialize or Deserialize.</typeparam>
 public interface IXLeratorFactory<T> where T : class
 {
     /// <summary>

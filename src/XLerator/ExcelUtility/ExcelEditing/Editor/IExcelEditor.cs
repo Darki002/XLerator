@@ -3,7 +3,7 @@
 /// <summary>
 /// Allows to edit the Excel file.
 /// </summary>
-/// <typeparam name="T">The type of data and structure of the spreadsheet</typeparam>
+/// <typeparam name="T">The type to Serialize or Deserialize.</typeparam>
 public interface IExcelEditor<in T> : IDisposable where T : class
 {
     /// <summary>

@@ -3,7 +3,7 @@
 /// <summary>
 /// Allows to read the data in the Excel file in iteratable steps.
 /// </summary>
-/// <typeparam name="T">The type of data and structure of the spreadsheet.</typeparam>
+/// <typeparam name="T">The type to Serialize or Deserialize.</typeparam>
 public interface IExcelIterator<out T> : IDisposable where T : class
 {
     /// <summary>

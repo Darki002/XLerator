@@ -35,3 +35,4 @@ The following functionalities are possible to use. Also see [Factory](#factory).
 ## Plans for the future
 
 - option for custom Mapper
+- Optimes Interface

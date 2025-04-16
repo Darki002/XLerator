@@ -5,4 +5,4 @@
 ///     properties as the column index.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class NoExcelIndexes : Attribute;
+public class ColumnOrder : Attribute;

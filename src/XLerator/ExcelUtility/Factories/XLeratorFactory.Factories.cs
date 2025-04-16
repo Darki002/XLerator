@@ -36,7 +36,7 @@ public partial class XLeratorFactory<T>
     
     internal static ExcelMapperBase CreateMapper(Type type)
     {
-        if (type.IsDefined(typeof(NoExcelIndexes)))
+        if (type.IsDefined(typeof(ColumnOrder)))
         {
             return HeaderExcelMapper.CreateFrom(type);
         }

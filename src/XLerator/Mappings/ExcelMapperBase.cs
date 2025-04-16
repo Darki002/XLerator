@@ -2,8 +2,8 @@
 
 internal abstract class ExcelMapperBase
 {
-    internal readonly Dictionary<string, string> HeaderMap = new Dictionary<string, string>();
-    internal readonly Dictionary<string, int> PropertyIndexMap = new Dictionary<string, int>();
+    internal readonly Dictionary<string, string> HeaderMap = new();
+    internal readonly Dictionary<string, int> PropertyIndexMap = new();
 
     public abstract string? GetHeaderFor(string propertyName);
 
@@ -37,6 +37,4 @@ internal abstract class ExcelMapperBase
 
         return columnName;
     }
-
-    // TODO: allow to add old mappings, in case the class used to be different, so that the old data still can be read.
 }

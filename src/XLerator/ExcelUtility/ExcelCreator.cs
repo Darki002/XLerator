@@ -1,26 +1,11 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
-using XLerator.ExcelUtility.ExcelEditing.Editor;
 using XLerator.Mappings;
 
-namespace XLerator.ExcelUtility.ExcelEditing.Creator;
+namespace XLerator.ExcelUtility;
 
-internal class ExcelCreator<T> : IExcelCreator<T> where T : class
+internal static class ExcelCreator<T> where T : class
 {
-    private readonly ExcelMapperBase excelMapper;
-    private readonly XLeratorOptions options;
-    
-    private ExcelCreator(XLeratorOptions options, ExcelMapperBase excelMapper)
-    {
-        this.excelMapper = excelMapper;
-        this.options = options;
-    }
-
-    internal static IExcelCreator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
-    {
-       return new ExcelCreator<T>(options, excelMapper);
-    }
-    
-    public IExcelEditor<T> CreateExcel()
+    public static Spreadsheet CreateExcel(XLeratorOptions options, ExcelMapperBase excelMapper)
     {
        var spreadsheet = Spreadsheet.Create(options);
         
@@ -29,7 +14,7 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
             try
             {
                 var index = (uint)options.HeaderLength;
-                AddHeader(spreadsheet, index);
+                AddHeader(spreadsheet, excelMapper, index);
             }
             catch
             {
@@ -40,10 +25,10 @@ internal class ExcelCreator<T> : IExcelCreator<T> where T : class
         }
         spreadsheet.Save();
 
-        return ExcelEditor<T>.CreateFrom(spreadsheet, excelMapper, options);
+        return spreadsheet;
     }
     
-    private void AddHeader(Spreadsheet spreadsheet, uint index)
+    private static void AddHeader(Spreadsheet spreadsheet, ExcelMapperBase excelMapper, uint index)
     {
        var row = ExcelHeader<T>.CreateFrom(index, excelMapper);
        var dataRow = new Row { RowIndex = index };

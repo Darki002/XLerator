@@ -2,7 +2,7 @@
 
 namespace XLerator.Tests.TestObjects;
 
-[ColumnOrder]
+[HeaderedExcel]
 public class HeaderedExcelClass
 {
     [HeaderName("Index")]

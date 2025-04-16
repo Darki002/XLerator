@@ -25,10 +25,9 @@ internal class ExcelIterator<T> : IExcelIterator<T> where T : class
         currentRow = null;
         currentRowIndex = 0;
     }
-
-    internal static ExcelIterator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
+    
+    internal static ExcelIterator<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper, Spreadsheet spreadsheet)
     {
-        var spreadsheet = Spreadsheet.Open(options, false);
         return new ExcelIterator<T>(spreadsheet, excelMapper, options);
     }
     

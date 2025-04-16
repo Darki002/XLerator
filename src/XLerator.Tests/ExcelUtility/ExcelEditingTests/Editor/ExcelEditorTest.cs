@@ -2,7 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility;
-using XLerator.ExcelUtility.ExcelEditing.Editor;
+using XLerator.ExcelUtility.ExcelEditing;
 using XLerator.Tests.Mappings;
 using XLerator.Tests.TestObjects;
 
@@ -16,7 +16,7 @@ public class ExcelEditorTest
     {
         // Arrange
         const string filePath = "./Write_AddsNewRowToSpreadSheet.xlsx";
-        XLeratorTest.FilePaths.Add(filePath);
+        XLeratorSpreadsheetTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {
@@ -29,7 +29,7 @@ public class ExcelEditorTest
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Id), 1);
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Name), 2);
         
-        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper, options);
+        var testee = ExcelEditor<HeaderedExcelClass>.Create(spreadsheet, mapper, options);
         
         // Act
         var data = new HeaderedExcelClass
@@ -70,7 +70,7 @@ public class ExcelEditorTest
     {
         // Arrange
         const string filePath = "./WriteMany_AddsNewRowsToSpreadSheet.xlsx";
-        XLeratorTest.FilePaths.Add(filePath);
+        XLeratorSpreadsheetTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {
@@ -83,7 +83,7 @@ public class ExcelEditorTest
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Id), 1);
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Name), 2);
         
-        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper, options);
+        var testee = ExcelEditor<HeaderedExcelClass>.Create(spreadsheet, mapper, options);
         
         // Act
         var data = new HeaderedExcelClass
@@ -143,7 +143,7 @@ public class ExcelEditorTest
     {
         // Arrange
         const string filePath = "./Update_UpdatesTheRowOnSpreadSheet.xlsx";
-        XLeratorTest.FilePaths.Add(filePath);
+        XLeratorSpreadsheetTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {
@@ -170,7 +170,7 @@ public class ExcelEditorTest
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Id), 1);
         mapper.AddPropertyIndexMap(nameof(HeaderedExcelClass.Name), 2);
         
-        var testee = ExcelEditor<HeaderedExcelClass>.CreateFrom(spreadsheet, mapper, options);
+        var testee = ExcelEditor<HeaderedExcelClass>.Create(spreadsheet, mapper, options);
         
         // Act
         testee.Update(2, update);

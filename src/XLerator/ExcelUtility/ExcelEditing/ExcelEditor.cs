@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.Mappings;
 
-namespace XLerator.ExcelUtility.ExcelEditing.Editor;
+namespace XLerator.ExcelUtility.ExcelEditing;
 
 internal class ExcelEditor<T> : IExcelEditor<T> where T : class
 {
@@ -17,14 +17,8 @@ internal class ExcelEditor<T> : IExcelEditor<T> where T : class
         this.options = options;
         this.spreadsheet = spreadsheet;
     }
-
-    internal static ExcelEditor<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
-    {
-        var spreadsheet = Spreadsheet.Open(options, true);
-        return new ExcelEditor<T>(spreadsheet, excelMapper, options);
-    }
     
-    internal static ExcelEditor<T> CreateFrom(Spreadsheet spreadsheet, ExcelMapperBase excelMapper, XLeratorOptions options)
+    internal static ExcelEditor<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper, Spreadsheet spreadsheet)
     {
         return new ExcelEditor<T>(spreadsheet, excelMapper, options);
     }

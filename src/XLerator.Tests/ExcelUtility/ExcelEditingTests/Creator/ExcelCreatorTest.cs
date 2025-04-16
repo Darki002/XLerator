@@ -1,7 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using XLerator.ExcelUtility;
-using XLerator.ExcelUtility.ExcelEditing.Creator;
 using XLerator.Tests.Mappings;
 using XLerator.Tests.TestObjects;
 
@@ -15,7 +14,7 @@ public class ExcelCreatorTest
     {
         // Arrange
         const string filePath = "./CreateExcel_ReturnsNewIExcelEditor.xlsx";
-        XLeratorTest.FilePaths.Add(filePath);
+        XLeratorSpreadsheetTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {
@@ -37,7 +36,7 @@ public class ExcelCreatorTest
     {
         // Arrange
         const string filePath = "./CreateExcel_CreatesANewExcelFile.xlsx";
-        XLeratorTest.FilePaths.Add(filePath);
+        XLeratorSpreadsheetTest.FilePaths.Add(filePath);
         
         var options = new XLeratorOptions
         {
@@ -60,7 +59,7 @@ public class ExcelCreatorTest
     {
         // Arrange
         const string filePath = "./CreateExcel_CreatesHeader_WhenSetTrue.xlsx";
-        XLeratorTest.FilePaths.Add(filePath);
+        XLeratorSpreadsheetTest.FilePaths.Add(filePath);
         
         const string sheetName = "Sheet";
         var options = new XLeratorOptions

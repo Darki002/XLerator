@@ -77,7 +77,7 @@ public class ExcelReaderHelperTest
                 {
                     FilePath = filePath
                 });
-            XLeratorTest.FilePaths.Add(filePath);
+            XLeratorSpreadsheetTest.FilePaths.Add(filePath);
 
             // Act
             var helper = new Helper<Dummy>(spreadsheet, new ExcelMapperDummy());
@@ -97,7 +97,7 @@ public class ExcelReaderHelperTest
                 {
                     FilePath = filePath
                 });
-            XLeratorTest.FilePaths.Add(filePath);
+            XLeratorSpreadsheetTest.FilePaths.Add(filePath);
             
             var mapper = new ExcelMapperBaseFake();
             mapper.AddPropertyIndexMap("Test", 2);

@@ -17,10 +17,9 @@ internal class ExcelReader<T> : IExcelReader<T> where T : class
         this.excelMapper = excelMapper;
         this.options = options;
     }
-
-    internal static ExcelReader<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper)
+    
+    internal static ExcelReader<T> Create(XLeratorOptions options, ExcelMapperBase excelMapper, Spreadsheet spreadsheet)
     {
-        var spreadsheet = Spreadsheet.Open(options, false);
         return new ExcelReader<T>(spreadsheet, excelMapper, options);
     }
 

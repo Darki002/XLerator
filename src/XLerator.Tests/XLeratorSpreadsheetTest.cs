@@ -1,7 +1,7 @@
 ﻿namespace XLerator.Tests;
 
 [SetUpFixture]
-public static class XLeratorTest
+public static class XLeratorSpreadsheetTest
 {
     public static readonly List<string> FilePaths = new List<string>();
 
